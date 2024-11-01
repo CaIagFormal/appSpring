@@ -8,6 +8,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface R_Usuario extends JpaRepository<M_Usuario, Long> {
-    @Query(value = "SELECT * FROM USUARIO WHERE USUARIO = :USUARIO AND SENHA = :SENHA LIMIT 1", nativeQuery = true)
+    @Query(value = "SELECT * FROM USUARIO WHERE USUARIO = :USUARIO AND SENHA = :SENHA ORDER BY ID LIMIT 1", nativeQuery = true)
     M_Usuario getUsuarioByUsuarioSenha(@Param("USUARIO") String usuario, @Param("SENHA") String senha);
 }
