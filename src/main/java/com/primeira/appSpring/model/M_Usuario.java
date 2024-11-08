@@ -4,13 +4,17 @@ import jakarta.persistence.*;
 import jdk.jfr.Enabled;
 
 @Entity
-@Table(name="usuario")
+@Table(name="usuario", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"usuario","apelido"})
+})
 public class M_Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String usuario;
     private String apelido;
+
     private String senha;
 
     public Long getId() {

@@ -1,15 +1,25 @@
 package com.primeira.appSpring.service;
 
+import com.primeira.appSpring.model.M_Quarto;
 import com.primeira.appSpring.model.M_Usuario;
+import com.primeira.appSpring.repository.R_Locacao;
+import com.primeira.appSpring.repository.R_Quarto;
 import com.primeira.appSpring.repository.R_Usuario;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
+import java.util.List;
 
 @Service
 public class S_Cadastro {
     private static R_Usuario r_usuario;
+    private static R_Locacao r_locacao;
+    private static R_Quarto r_quarto;
 
-    public S_Cadastro(R_Usuario r_usuario) {
+    public S_Cadastro(R_Usuario r_usuario, R_Locacao r_locacao, R_Quarto r_quarto){
         this.r_usuario = r_usuario;
+        this.r_locacao = r_locacao;
+        this.r_quarto = r_quarto;
     }
 
     public static M_Usuario cadastrarUsuario(String usuario, String usuario_conf,
@@ -37,5 +47,9 @@ public class S_Cadastro {
             return r_usuario.save(m_usuario);
         }
         return null;
+    }
+
+    public static List<M_Quarto> getQuartos() {
+        return r_quarto.getAvailableQuarto(LocalDate.now());
     }
 }
