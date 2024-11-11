@@ -26,4 +26,52 @@ public class M_Locacao {
     private M_Quarto quarto;
 
     private BigDecimal senha;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public M_Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(M_Usuario usuario) {
+        this.usuario = usuario;
+    }
+
+    public Date getCheckin() {
+        return checkin;
+    }
+
+    public void setCheckin(Date checkin) {
+        this.checkin = checkin;
+    }
+
+    public Date getCheckout() {
+        return checkout;
+    }
+
+    public void setCheckout(Date checkout) {
+        this.checkout = checkout;
+    }
+
+    public M_Quarto getQuarto() {
+        return quarto;
+    }
+
+    public void setQuarto(M_Quarto quarto) {
+        this.quarto = quarto;
+    }
+
+    public BigDecimal getSenha() {
+        return senha;
+    }
+
+    public void setSenha(BigDecimal senha) {
+        this.senha = senha;
+    }
 }

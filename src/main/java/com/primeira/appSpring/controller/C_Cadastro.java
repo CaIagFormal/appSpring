@@ -1,14 +1,18 @@
 package com.primeira.appSpring.controller;
 
+import com.primeira.appSpring.model.M_Locacao;
 import com.primeira.appSpring.model.M_Usuario;
 import com.primeira.appSpring.service.S_Cadastro;
 import com.primeira.appSpring.service.S_Home;
 import jakarta.servlet.http.HttpSession;
+import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import java.time.LocalDate;
 
 @Controller
 public class C_Cadastro {
@@ -41,5 +45,16 @@ public class C_Cadastro {
             return "locacao/cadastro";
         }
         return "redirect:/";
+    }
+
+    @PostMapping("/cadLocacao")
+    public String postCadLocacao(@RequestParam("quarto") String quarto,
+                                 @RequestParam("checkout") LocalDate checkout,
+                                 HttpSession session) {
+        M_Locacao m_locacao = S_Cadastro.cadastrarLocacao((M_Usuario) session.getAttribute("usuario"),quarto,LocalDate.now(),checkout);
+        if (!(m_locacao == null)) {
+            return "home/home";
+        }
+        return "redirect:/cadLocacao";
     }
 }

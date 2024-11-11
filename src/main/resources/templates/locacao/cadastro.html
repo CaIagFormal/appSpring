@@ -34,10 +34,10 @@
     <h1 class="text-center mt-5 mb-5">Locação</h1>
 
     <form action="/cadLocacao" method="POST">
-      <select class="form-select">
+      <select name="quarto" class="form-select">
         <option selected>Quarto</option>
 
-        <option th:each="quarto : ${quartos}" th:value="${quarto.id}"><span th:text="${quarto.num}"></span>: <span th:text="${quarto.descricao}"></span> | Classe: <span th:text="${quarto.classe}"></span> | Camas: <span th:text="${quarto.qtd_camas}"></span> | Preço: <span th:text="${quarto.preco}"></span> </option>
+        <option th:each="quarto : ${quartos}" th:value="${quarto.id}"><span th:text="${quarto.num}"></span>: Classe: <span th:text="${quarto.classe}"></span> | Camas: <span th:text="${quarto.qtd_camas}"></span> | Preço: <span th:text="${quarto.preco}"></span> </option>
        </select>
 
         <div class="input-group mb-3">
@@ -50,6 +50,13 @@
         </div>
     </form>
 
+    <br>
+
+    <h2>Classe: <span id="classe"></span></h2>
+    <h2>Preço: <span id="preco"></span></h2>
+    <h2>Camas: <span id="camas"></span></h2>
+    <h2>Descrição: <span id="desc"></span></h2>
+
         <!--<div class="input-group mb-3">
             <span class="input-group-text">Check In</span>
             <input name="checkin" type="date" class="form-control" placeholder="Check-In">
@@ -58,5 +65,28 @@
         </div>
 </body>
 
+<script th:inline="javascript">
+
+    /*<![CDATA[*/
+    var quartos = [[${quartos}]];
+    /*]]>*/
+    function changeSelect() {
+
+     let optionSelected = $(this).find("option:selected");
+     let valueSelected  = optionSelected.val();
+     $.each(quartos, function( index, value ) {
+        if (value['id'] == valueSelected) {
+            $('#classe').text(value['classe']);
+            $('#preco').text(value['preco']);
+            $('#camas').text(value['qtd_camas']);
+
+            $('#desc').text(value['descricao']);
+
+            return;
+        }
+     });
+    }
+    $('select').change(changeSelect);
+</script>
 
 </html>

@@ -1,14 +1,19 @@
 package com.primeira.appSpring.service;
 
+import com.primeira.appSpring.model.M_Locacao;
 import com.primeira.appSpring.model.M_Quarto;
 import com.primeira.appSpring.model.M_Usuario;
 import com.primeira.appSpring.repository.R_Locacao;
 import com.primeira.appSpring.repository.R_Quarto;
 import com.primeira.appSpring.repository.R_Usuario;
+import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Random;
 
 @Service
 public class S_Cadastro {
@@ -51,5 +56,37 @@ public class S_Cadastro {
 
     public static List<M_Quarto> getQuartos() {
         return r_quarto.getAvailableQuarto(LocalDate.now());
+    }
+
+    public static M_Locacao cadastrarLocacao(M_Usuario usuario,String quarto, LocalDate checkin, LocalDate checkout) {
+        boolean pode_salvar = true;
+        if (checkout==null) {
+            pode_salvar = false;
+        } else {
+        if (checkin.isAfter(checkout)) {
+            pode_salvar = false;
+        } }
+        if (quarto.equals("Quarto")) {
+            pode_salvar = false;
+        }
+
+        System.out.println(quarto+" "+checkin+" "+checkout);
+
+        if (pode_salvar) {
+            M_Locacao m_locacao = new M_Locacao();
+            m_locacao.setSenha(S_Cadastro.gerarSenha());
+            m_locacao.setCheckin(Date.valueOf(checkin));
+            m_locacao.setCheckout(Date.valueOf(checkout));
+            m_locacao.setQuarto(r_quarto.getQuartoById(Integer.valueOf(quarto)));
+            m_locacao.setUsuario(usuario);
+
+            return r_locacao.save(m_locacao);
+        }
+        return null;
+    }
+
+    public static BigDecimal gerarSenha() {
+
+        return BigDecimal.valueOf(new Random().nextLong(999999999));
     }
 }
