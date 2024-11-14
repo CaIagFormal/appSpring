@@ -25,7 +25,7 @@ public class M_Locacao {
     @JoinColumn(name="id_quarto")
     private M_Quarto quarto;
 
-    private BigDecimal senha;
+    private String senha;
 
     public Long getId() {
         return id;
@@ -67,11 +67,11 @@ public class M_Locacao {
         this.quarto = quarto;
     }
 
-    public BigDecimal getSenha() {
+    public String getSenha() {
         return senha;
     }
 
-    public void setSenha(BigDecimal senha) {
+    public void setSenha(String senha) {
         this.senha = senha;
     }
 }

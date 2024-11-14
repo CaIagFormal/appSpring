@@ -55,6 +55,7 @@ public class C_Cadastro {
         if (!(m_locacao == null)) {
             return "home/home";
         }
+        S_Cadastro.salvarComoPainelAtual(m_locacao);
         return "redirect:/cadLocacao";
     }
 }

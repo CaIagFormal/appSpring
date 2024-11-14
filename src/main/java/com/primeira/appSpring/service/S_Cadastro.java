@@ -9,6 +9,8 @@ import com.primeira.appSpring.repository.R_Usuario;
 import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.time.LocalDate;
@@ -85,8 +87,15 @@ public class S_Cadastro {
         return null;
     }
 
-    public static BigDecimal gerarSenha() {
+    public static String gerarSenha() {
 
-        return BigDecimal.valueOf(new Random().nextLong(999999999));
+        return String.valueOf(new Random().nextLong(999999999));
+    }
+
+    public static void salvarComoPainelAtual(M_Locacao mLocacao) {
+//        try {
+//            FileWriter data = new FileWriter("painel.txt");
+//            data.write(mLocacao.getSenha().toString());
+//        } catch ()
     }
 }

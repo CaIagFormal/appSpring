@@ -43,11 +43,11 @@ public class ArduinoSerialCommunication {
             e.printStackTrace();
         }
 
+
         while (true) {
             try {
                 if (input.ready()) {
                     String inputLine = input.readLine();
-                    System.out.println("Dados recebidos: " + inputLine.trim());
 
                     output.write(S_Arduino.valida_senha(inputLine.trim()));
 
