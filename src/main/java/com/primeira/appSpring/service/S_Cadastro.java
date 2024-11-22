@@ -6,12 +6,8 @@ import com.primeira.appSpring.model.M_Usuario;
 import com.primeira.appSpring.repository.R_Locacao;
 import com.primeira.appSpring.repository.R_Quarto;
 import com.primeira.appSpring.repository.R_Usuario;
-import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.math.BigDecimal;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
@@ -23,15 +19,15 @@ public class S_Cadastro {
     private static R_Locacao r_locacao;
     private static R_Quarto r_quarto;
 
-    public S_Cadastro(R_Usuario r_usuario, R_Locacao r_locacao, R_Quarto r_quarto){
+    public S_Cadastro(R_Usuario r_usuario, R_Locacao r_locacao, R_Quarto r_quarto) {
         this.r_usuario = r_usuario;
         this.r_locacao = r_locacao;
         this.r_quarto = r_quarto;
     }
 
     public static M_Usuario cadastrarUsuario(String usuario, String usuario_conf,
-                                      String apelido, String apelido_conf,
-                                      String senha, String conf_senha) {
+                                             String apelido, String apelido_conf,
+                                             String senha, String conf_senha) {
         boolean pode_salvar = true;
 
         if (senha.trim().equals("") || senha == null || !senha.trim().equals(conf_senha)) {
@@ -56,23 +52,24 @@ public class S_Cadastro {
         return null;
     }
 
-    public static List<M_Quarto> getQuartos() {
-        return r_quarto.getAvailableQuarto(LocalDate.now());
+    public static List<M_Quarto> getQuartos(LocalDate checkout) {
+        return r_quarto.getAvailableQuarto(LocalDate.now(),checkout);
     }
 
-    public static M_Locacao cadastrarLocacao(M_Usuario usuario,String quarto, LocalDate checkin, LocalDate checkout) {
+    public static M_Locacao cadastrarLocacao(M_Usuario usuario, String quarto, LocalDate checkin, LocalDate checkout) {
         boolean pode_salvar = true;
-        if (checkout==null) {
+        if (checkout == null) {
             pode_salvar = false;
         } else {
-        if (checkin.isAfter(checkout)) {
-            pode_salvar = false;
-        } }
+            if (checkin.isAfter(checkout)) {
+                pode_salvar = false;
+            }
+        }
         if (quarto.equals("Quarto")) {
             pode_salvar = false;
         }
 
-        System.out.println(quarto+" "+checkin+" "+checkout);
+        System.out.println(quarto + " " + checkin + " " + checkout);
 
         if (pode_salvar) {
             M_Locacao m_locacao = new M_Locacao();
@@ -92,10 +89,5 @@ public class S_Cadastro {
         return String.valueOf(new Random().nextLong(999999999));
     }
 
-    public static void salvarComoPainelAtual(M_Locacao mLocacao) {
-//        try {
-//            FileWriter data = new FileWriter("painel.txt");
-//            data.write(mLocacao.getSenha().toString());
-//        } catch ()
-    }
+
 }

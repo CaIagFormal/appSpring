@@ -1,0 +1,29 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<option th:each="quarto : ${quartos}" th:value="${quarto.id}"><span th:text="${quarto.num}"></span>: Classe: <span th:text="${quarto.classe}"></span> | Camas: <span th:text="${quarto.qtd_camas}"></span> | Preço: <span th:text="${quarto.preco}"></span> </option>
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    var quartos = [[${quartos}]];
+    /*]]>*/
+
+
+    function changeSelect() {
+
+     let optionSelected = $(this).find("option:selected");
+     let valueSelected  = optionSelected.val();
+     $.each(quartos, function( index, value ) {
+        if (value['id'] == valueSelected) {
+            $('#classe').text(value['classe']);
+            $('#preco').text(value['preco']);
+            $('#camas').text(value['qtd_camas']);
+
+            $('#desc').text(value['descricao']);
+
+            return;
+        }
+     });
+    }
+    changeSelect.call($('select'));
+
+    $('select').change(changeSelect);
+</script>
