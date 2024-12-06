@@ -78,6 +78,7 @@ public class S_Cadastro {
             m_locacao.setCheckout(Date.valueOf(checkout));
             m_locacao.setQuarto(r_quarto.getQuartoById(Integer.valueOf(quarto)));
             m_locacao.setUsuario(usuario);
+            m_locacao.setPreco(m_locacao.getQuarto().getPreco());
 
             return r_locacao.save(m_locacao);
         }

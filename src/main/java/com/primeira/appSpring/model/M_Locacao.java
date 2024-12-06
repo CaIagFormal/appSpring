@@ -27,6 +27,8 @@ public class M_Locacao {
 
     private String senha;
 
+    private BigDecimal preco;
+
     public Long getId() {
         return id;
     }
@@ -73,5 +75,13 @@ public class M_Locacao {
 
     public void setSenha(String senha) {
         this.senha = senha;
+    }
+
+    public BigDecimal getPreco() {
+        return preco;
+    }
+
+    public void setPreco(BigDecimal preco) {
+        this.preco = preco;
     }
 }
