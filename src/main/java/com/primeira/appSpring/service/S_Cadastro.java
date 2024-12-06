@@ -52,8 +52,8 @@ public class S_Cadastro {
         return null;
     }
 
-    public static List<M_Quarto> getQuartos(LocalDate checkout) {
-        return r_quarto.getAvailableQuarto(LocalDate.now(),checkout);
+    public static List<M_Quarto> getQuartos(LocalDate checkin, LocalDate checkout) {
+        return r_quarto.getAvailableQuarto(checkin,checkout);
     }
 
     public static M_Locacao cadastrarLocacao(M_Usuario usuario, String quarto, LocalDate checkin, LocalDate checkout) {

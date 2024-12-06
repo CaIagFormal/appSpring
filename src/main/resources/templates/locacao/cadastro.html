@@ -13,10 +13,11 @@
             src="https://code.jquery.com/jquery-3.7.1.min.js"
             integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
             crossorigin="anonymous"></script>
+            <!--CUSTOMS-->
+            <script src="/js/index.js" defer></script>
+            <script src="/js/locacao.js" defer></script>
 </head>
-<!--CUSTOMS-->
-<script src="/js/index.js" defer></script>
-<script src="/js/locacao.js" defer></script>
+
 <body>
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container-fluid">
@@ -31,46 +32,32 @@
         <a id="btn-logout" class="btn btn-danger">Logout</a>
     </div>
 </nav>
+<p id="erro" class="text-center" style="background: #F00; color: #FFF"></p>
 <div class="container">
-
-    <div th:if="${mensagem != null}" class="container">
-        <h1 class="text-center" style="background: #F00; color: #FFF" th:text="${mensagem}"></h1>
-    </div>
     <h1 class="text-center mt-5 mb-5">Locação</h1>
-
-    <div class="input-group mb-3">
+    <div class="container row">
+    <div class="input-group mb-3 col-6">
+        <span class="input-group-text">Check In</span>
+        <input id="chkin" name="checkin" type="date" class="form-control" placeholder="Check-In">
+    </div>
+    <div class="input-group mb-3 col-6">
         <span class="input-group-text">Check Out</span>
         <input id="chkout" name="checkout" type="date" class="form-control" placeholder="Check-Out">
     </div>
+    </div>
     <button id="achar" class="btn btn-danger mb-3">Achar Quarto</button>
     <div id="achado" class="d-none">
-    <form action="/cadLocacao" method="POST">
-      <select name="quarto" class="form-select">
-        <option selected>Quarto</option>
-
+      <select id="quarto" class="form-select">
       </select>
-
-        <div class="input-group mb-3">
-            <span class="input-group-text">Check Out</span>
-            <input id="chkout2" name="checkout" type="date" class="form-control" placeholder="Check-Out">
+        <div class="col-6 text-end">
+            <button id="enviar" class="btn btn-danger mt-3">Locação</button>
         </div>
-
-        <div  class="col-6 text-end">
-            <button type="submit" class="btn btn-danger">Locação</button>
-        </div>
-    </form>
-
     <br>
     <div>
-    <h2>Classe: <span id="classe"></span></h2>
-    <h2>Preço: <span id="preco"></span></h2>
-    <h2>Camas: <span id="camas"></span></h2>
-    <h2>Descrição: <span id="desc"></span></h2>
-
-        <!--<div class="input-group mb-3">
-            <span class="input-group-text">Check In</span>
-            <input name="checkin" type="date" class="form-control" placeholder="Check-In">
-        </div>-->
+    <p>Classe: <span id="classe"></span></p>
+    <p>Preço: <span id="preco"></span> R$</p>
+    <p>Camas: <span id="camas"></span></p>
+    <p>Descrição: <span id="desc"></span></p>
     </div>
     </div>
 

@@ -1,16 +1,21 @@
 package com.primeira.appSpring.controller;
 
+import com.fasterxml.jackson.databind.ser.impl.StringArraySerializer;
 import com.primeira.appSpring.model.M_Locacao;
 import com.primeira.appSpring.model.M_Usuario;
 import com.primeira.appSpring.service.S_Cadastro;
 import com.primeira.appSpring.service.S_Home;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.time.LocalDate;
 
 @Controller
@@ -38,7 +43,6 @@ public class C_Cadastro {
     //Locação
     @GetMapping("/cadLocacao")
     public String getCadLocacao(HttpSession session, Model model) {
-        model.addAttribute("mensagem",null);
         if (!(session.getAttribute("usuario") ==null)) {
 
 
@@ -48,23 +52,37 @@ public class C_Cadastro {
     }
 
     @PostMapping("/cadLocacao")
+    @ResponseBody
     public String postCadLocacao(@RequestParam("quarto") String quarto,
                                  @RequestParam("checkout") LocalDate checkout,
+                                 @RequestParam("checkin") LocalDate checkin,
                                  HttpSession session,
-                                 Model model) {
-        M_Locacao m_locacao = S_Cadastro.cadastrarLocacao((M_Usuario) session.getAttribute("usuario"),quarto,LocalDate.now(),checkout);
-        if (!(m_locacao == null)) {
-            model.addAttribute("mensagem", "A locação foi criada");
-            model.addAttribute("locacoes", S_Home.getLocacaosByUser((M_Usuario) session.getAttribute("usuario")));
-            return "redirect:/";
+                                 Model model,
+                                 HttpServletResponse response) {
+        if (checkin.isAfter(checkout)) {
+            response.setContentType("text/plain");
+            response.setCharacterEncoding("UTF-8");
+            return "Data de check in está após data de check out";
         }
-        model.addAttribute("mensagem", "Deu erro ao criar");
-        return "redirect:/cadLocacao";
+        M_Locacao m_locacao = S_Cadastro.cadastrarLocacao((M_Usuario) session.getAttribute("usuario"),quarto,checkin,checkout);
+        if (!(m_locacao == null)) {
+            String html = "<div class=\"container\">\n" +
+                    "    <h1 class=\"text-center mt-5\">Você reservou sua locação com sucesso!!</h1>\n" +
+                    "    <h2 class=\"text-center\">Não compartilhe sua senha: "+m_locacao.getSenha()+"</h2>\n" +
+                    "    <a href=\"/\" class=\"container text-center btn btn-success mt-5\">Retornar para página incial</a>\n" +
+                    "</div>";
+            return html;
+        }
+
+        response.setContentType("text/plain");
+        response.setCharacterEncoding("UTF-8");
+        return "Algo occoreu ao registrar a locação";
     }
     @PostMapping("/getQuartosDisp")
     public String getQuartosDisp(@RequestParam("checkout") LocalDate checkout,
+                                 @RequestParam("checkin") LocalDate checkin,
                                  Model model) {
-        model.addAttribute("quartos", S_Cadastro.getQuartos(checkout));
+        model.addAttribute("quartos", S_Cadastro.getQuartos(checkin,checkout));
         return "pv/quartosdisp";
     }
 }
