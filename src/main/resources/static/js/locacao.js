@@ -68,12 +68,25 @@ $("#enviar").click(function() {
         success: function(response)
         {
             if (response.charAt(0)=="<") {
-                $("body").empty();
-                $("body").append(response);
+                $("#conteudo").empty();
+                $("#conteudo").append(response);
                 return;
             }
-            $("#erro").removeClass("d-none");
-            $("#erro").text(response);
+            const Toast = Swal.mixin({
+              toast: true,
+              position: "top-end",
+              showConfirmButton: false,
+              timer: 3000,
+              timerProgressBar: true,
+              didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+              }
+            });
+            Toast.fire({
+              icon: "error",
+              title: response
+            });
         }
     });
 });

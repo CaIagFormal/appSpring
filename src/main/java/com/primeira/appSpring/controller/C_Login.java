@@ -19,8 +19,9 @@ public class C_Login {
             Model model
     ) {
         if (session.getAttribute("usuario")!=null) {
-            model.addAttribute("locacoes", S_Home.getLocacaosByUser((M_Usuario) session.getAttribute("usuario")));
-            model.addAttribute("mensagem",null);
+            model.addAttribute("emcurso", S_Home.getLocacaoEmCurso((M_Usuario) session.getAttribute("usuario")));
+            model.addAttribute("completa", S_Home.getLocacaoCompleta((M_Usuario) session.getAttribute("usuario")));
+            model.addAttribute("reserva", S_Home.getLocacaoReserva((M_Usuario) session.getAttribute("usuario")));
             return "home/home";
         }
         return "index";

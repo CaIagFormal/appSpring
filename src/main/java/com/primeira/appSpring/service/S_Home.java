@@ -22,4 +22,16 @@ public class S_Home {
     //}
 
     public static List<M_Locacao> getLocacaosByUser(M_Usuario usuario) { return r_locacao.getLocacaoByUsuario(usuario.getId());}
+
+    public static List<M_Locacao> getLocacaoEmCurso(M_Usuario usuario) {
+        return r_locacao.getLocacaoEmCurso(usuario.getId());
+    }
+
+    public static List<M_Locacao> getLocacaoCompleta(M_Usuario usuario) {
+        return r_locacao.getLocacaoCompleta(usuario.getId());
+    }
+
+    public static List<M_Locacao> getLocacaoReserva(M_Usuario usuario) {
+        return r_locacao.getLocacaoEmReserva(usuario.getId());
+    }
 }

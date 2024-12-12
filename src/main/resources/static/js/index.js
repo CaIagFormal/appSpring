@@ -20,5 +20,4 @@ function logOut() {
     });
 
 }
-
 $("#btn-logout").click(logOut);

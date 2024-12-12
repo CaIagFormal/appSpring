@@ -2,6 +2,7 @@ package com.primeira.appSpring.service;
 
 import com.primeira.appSpring.model.M_Locacao;
 import com.primeira.appSpring.model.M_Quarto;
+import com.primeira.appSpring.model.M_Resposta;
 import com.primeira.appSpring.model.M_Usuario;
 import com.primeira.appSpring.repository.R_Locacao;
 import com.primeira.appSpring.repository.R_Quarto;
@@ -56,33 +57,27 @@ public class S_Cadastro {
         return r_quarto.getAvailableQuarto(checkin,checkout);
     }
 
-    public static M_Locacao cadastrarLocacao(M_Usuario usuario, String quarto, LocalDate checkin, LocalDate checkout) {
-        boolean pode_salvar = true;
-        if (checkout == null) {
-            pode_salvar = false;
-        } else {
-            if (checkin.isAfter(checkout)) {
-                pode_salvar = false;
-            }
-        }
-        if (quarto.equals("Quarto")) {
-            pode_salvar = false;
-        }
+    public static M_Resposta cadastrarLocacao(M_Usuario usuario, M_Quarto quarto, LocalDate checkin, LocalDate checkout) {
+        M_Resposta m_resposta = new M_Resposta();
+        try {
 
-        System.out.println(quarto + " " + checkin + " " + checkout);
 
-        if (pode_salvar) {
             M_Locacao m_locacao = new M_Locacao();
             m_locacao.setSenha(S_Cadastro.gerarSenha());
             m_locacao.setCheckin(Date.valueOf(checkin));
             m_locacao.setCheckout(Date.valueOf(checkout));
-            m_locacao.setQuarto(r_quarto.getQuartoById(Integer.valueOf(quarto)));
+            m_locacao.setQuarto(quarto);
             m_locacao.setUsuario(usuario);
             m_locacao.setPreco(m_locacao.getQuarto().getPreco());
 
-            return r_locacao.save(m_locacao);
+            m_resposta.setObjeto(r_locacao.save(m_locacao));
+            m_resposta.setSucesso(m_resposta.getObjeto() != null);
+            m_resposta.setMensagem(m_resposta.isSucesso() ? null : "Houve um problema ao registrar a locação\n");
+        } catch (Exception e) {
+            m_resposta.setSucesso(false);
+            m_resposta.setMensagem("Houve um problema ao acessar o servidor\n");
         }
-        return null;
+        return m_resposta;
     }
 
     public static String gerarSenha() {
@@ -90,5 +85,35 @@ public class S_Cadastro {
         return String.valueOf(new Random().nextLong(999999999));
     }
 
+    public static M_Resposta conferirReserva(String quarto, LocalDate checkin, LocalDate checkout) {
+        M_Resposta m_resposta = new M_Resposta();
+        m_resposta.setSucesso(false);
+        String resposta="";
+        if (checkin == null) {
+            resposta += "Check-in não foi preenchido\n";
+        }
+        if (checkout == null) {
+            resposta += "Check-out não foi preenchido\n";
+        }
+        if (quarto.equals("Quarto")) {
+            resposta += "Quarto não foi selecionado\n";
+        }
+        if (checkin.isAfter(checkout)) {
+            resposta += "Check-in está após Check-out\n";
+        }
+        if (resposta.isBlank()) {
+            try {
+                Long quarto_id = Long.valueOf(quarto);
+                m_resposta.setObjeto(r_quarto.isQuartoAvailable(checkin, checkout, quarto_id));
+                m_resposta.setSucesso(m_resposta.getObjeto() != null && resposta.isBlank());
+                resposta += m_resposta.isSucesso() ? null : "Quarto já foi alocado ou não existe\n";
+            } catch (Exception e) {
+                m_resposta.setMensagem("Erro ao verificar quarto");
+                e.printStackTrace();
+            }
+        }
+        m_resposta.setMensagem(resposta);
+        return m_resposta;
+    }
 
 }
