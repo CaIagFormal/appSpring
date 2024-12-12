@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head>
   <meta charset="UTF-8">
   <title>Home</title>
@@ -16,70 +16,131 @@
   <!--CUSTOMS-->
   <script src="/js/index.js" defer></script>
 
-  <style>
-    .fundo {
-      background: #CCC;
-      color: #FFF;
-      border-radius: 10px;
-    }
-    .campo {
-      color: #F00;
-      background: #C8C;
-      border-radius: 5px 5px 10px 100px
-    }
-  </style>
-
 </head>
 
 <body>
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
   <div class="container-fluid">
-    <a class="navbar-brand" href="#">RAM Gratis 4k</a>
+    <a class="navbar-brand" href="/">RAM Gratis 4k</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
-    <li class="nav-item">
-      <a class="nav-link" href="/cadLocacao">Locacao</a>
-    </li>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link" href="/cadLocacao">Locacao</a>
+        </li>
       </ul>
     </div>
     <a id="btn-logout" class="btn btn-danger">Logout</a>
   </div>
 </nav>
-  <div th:if="${mensagem != null}" class="container">
-    <h1 class="text-center" style="background: #F00; color: #FFF" th:text="${mensagem}"></h1>
-  </div>
-
   <div class="container">
     <h1 class="text-center mt-5 mb-5">HOME</h1>
     <h2 class="text-center"> Você está perto de ter mais RAM!!!</h2>
-    <h2 class="text-center"> Alias aqui está suas locações</h2>
+    <h2 class="text-center mb-5"> Alias aqui está suas locações</h2>
   </div>
 
-<div class="container fundo">
-  <div class="row">
-    <div class="col-3 campo"><h2>CHECK-IN</h2></div>
-    <div class="col-3 campo"><h2>CHECK-OUT</h2></div>
-    <div class="col-3 campo"><h2>QUARTO</h2></div>
-    <div class="col-3 campo"><h2>SENHA</h2></div>
-  <div class="row" th:each="locacao : ${locacoes}">
-    <div class="col-3">
-      <h2 th:text="${locacao.checkin}"></h2>
-    </div>
-    <div class="col-3">
-      <h2 th:text="${locacao.checkout}"></h2>
-    </div>
-    <div class="col-3">
-      <h2 th:text="${locacao.quarto.num}"></h2>
-    </div>
-    <div class="col-3">
-      <h2 th:text="${locacao.senha}"></h2>
+  <h2 class="text-center">Minhas Locações</h2>
+  <div class="text-center container">
+    <div class="row ml-5 mr-5 mt-3">
+      <div class="col-4 container">
+        <h3 class="text-center">Concluidas</h3>
+        <div class="row container">
+          <div class="col-3">
+            <p class="text-center">Check-in</p>
+          </div>
+          <div class="col-3">
+            <p class="text-center">Check-out</p>
+          </div>
+          <div class="col-3">
+            <p class="text-center">Quarto</p>
+          </div>
+          <div class="col-3">
+            <p class="text-center">Preço</p>
+          </div>
+        </div>
+        <div th:each="locacao : ${completa}" class="row">
+          <div class="col-3">
+            <p th:text="${locacao.checkin}"></p>
+          </div>
+          <div class="col-3">
+            <p th:text="${locacao.checkout}"></p>
+          </div>
+          <div class="col-3">
+            <p th:text="${locacao.quarto.num}"></p>
+          </div>
+          <div class="col-3">
+            <p><span th:text="${locacao.preco}"></span> R$</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-4 container">
+        <h3 class="text-center">Em Curso</h3>
+        <div class="row container">
+          <div class="col-3">
+            <p class="text-center">Check-in</p>
+          </div>
+          <div class="col-3">
+            <p class="text-center">Check-out</p>
+          </div>
+          <div class="col-3">
+            <p class="text-center">Número</p>
+          </div>
+          <div class="col-3">
+            <p class="text-center">Preço</p>
+          </div>
+        </div>
+
+        <div th:each="locacao : ${emcurso}" class="row">
+          <div class="col-3">
+            <p th:text="${locacao.checkin}"></p>
+          </div>
+          <div class="col-3">
+            <p th:text="${locacao.checkout}"></p>
+          </div>
+          <div class="col-3">
+            <p th:text="${locacao.quarto.num}"></p>
+          </div>
+          <div class="col-3">
+            <p><span th:text="${locacao.preco}"></span> R$</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-4 container">
+        <h3 class="text-center">Reserva</h3>
+        <div class="row container">
+          <div class="col-3">
+            <p class="text-center">Check-in</p>
+          </div>
+          <div class="col-3">
+            <p class="text-center">Check-out</p>
+          </div>
+          <div class="col-3">
+            <p class="text-center">Número</p>
+          </div>
+          <div class="col-3">
+            <p class="text-center">Preço</p>
+          </div>
+        </div>
+
+        <div th:each="locacao : ${reserva}" class="row">
+          <div class="col-3">
+            <p th:text="${locacao.checkin}"></p>
+          </div>
+          <div class="col-3">
+            <p th:text="${locacao.checkout}"></p>
+          </div>
+          <div class="col-3">
+            <p th:text="${locacao.quarto.num}"></p>
+          </div>
+          <div class="col-3">
+            <p><span th:text="${locacao.preco}"></span> R$</p>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
-</div>
-</div>
 </body>
 
 
