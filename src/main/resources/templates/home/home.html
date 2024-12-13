@@ -15,7 +15,7 @@
           crossorigin="anonymous"></script>
   <!--CUSTOMS-->
   <script src="/js/index.js" defer></script>
-
+  <script src="/js/home.js" defer></script>
 </head>
 
 <body>
@@ -74,7 +74,7 @@
             <p th:text="${locacao.num}"></p>
           </div>
           <div class="col-2">
-            <p><span th:text="${locacao.preco*locacao.diarias}"></span> R$</p>
+            <p><span class="gasto" th:text="${locacao.preco*locacao.diarias}"></span> R$</p>
           </div>
           <div class="col-2">
             <p th:text="${locacao.diarias}"></p>
@@ -112,7 +112,7 @@
             <p th:text="${locacao.num}"></p>
           </div>
           <div class="col-2">
-            <p><span th:text="${locacao.preco*locacao.diarias}"></span> R$</p>
+            <p><span class="gasto" th:text="${locacao.preco*locacao.diarias}"></span> R$</p>
           </div>
           <div class="col-2">
             <p th:text="${locacao.diarias}"></p>
@@ -150,7 +150,7 @@
             <p th:text="${locacao.num}"></p>
           </div>
           <div class="col-2">
-            <p><span th:text="${locacao.preco*locacao.diarias}"></span> R$</p>
+            <p><span class="previsto" th:text="${locacao.preco*locacao.diarias}"></span> R$</p>
           </div>
           <div class="col-2">
             <p th:text="${locacao.diarias}"></p>
@@ -158,6 +158,10 @@
         </div>
       </div>
     </div>
+  </div>
+  <div class="container">
+    <h3 class="ml-5"> TOTAL GASTO: <span id="total_gasto"></span>R$</h3>
+    <h3 class="ml-5"> PREVISTO: <span id="total_previsto"></span>R$</h3>
   </div>
 </body>
 

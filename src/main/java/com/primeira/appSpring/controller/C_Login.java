@@ -22,6 +22,7 @@ public class C_Login {
             model.addAttribute("emcurso", S_Home.getLocacaoEmCurso((M_Usuario) session.getAttribute("usuario")));
             model.addAttribute("completa", S_Home.getLocacaoCompleta((M_Usuario) session.getAttribute("usuario")));
             model.addAttribute("reserva", S_Home.getLocacaoReserva((M_Usuario) session.getAttribute("usuario")));
+
             return "home/home";
         }
         return "index";
