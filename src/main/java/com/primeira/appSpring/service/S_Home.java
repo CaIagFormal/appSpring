@@ -2,8 +2,8 @@ package com.primeira.appSpring.service;
 
 import com.primeira.appSpring.model.M_Locacao;
 import com.primeira.appSpring.model.M_Usuario;
+import com.primeira.appSpring.model.M_ViewLocacao;
 import com.primeira.appSpring.repository.R_Locacao;
-import com.primeira.appSpring.repository.R_Usuario;
 import org.springframework.stereotype.Service;
 
 import javax.swing.*;
@@ -21,17 +21,30 @@ public class S_Home {
     //    return r_usuario.findAll();
     //}
 
-    public static List<M_Locacao> getLocacaosByUser(M_Usuario usuario) { return r_locacao.getLocacaoByUsuario(usuario.getId());}
-
-    public static List<M_Locacao> getLocacaoEmCurso(M_Usuario usuario) {
-        return r_locacao.getLocacaoEmCurso(usuario.getId());
+    public static List<M_ViewLocacao> getLocacaoEmCurso(M_Usuario usuario) {
+        try {
+            return r_locacao.getLocacaoEmCurso(usuario.getId());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
-    public static List<M_Locacao> getLocacaoCompleta(M_Usuario usuario) {
-        return r_locacao.getLocacaoCompleta(usuario.getId());
+    public static List<M_ViewLocacao> getLocacaoCompleta(M_Usuario usuario) {
+        try {
+            return r_locacao.getLocacaoCompleta(usuario.getId());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
-    public static List<M_Locacao> getLocacaoReserva(M_Usuario usuario) {
-        return r_locacao.getLocacaoEmReserva(usuario.getId());
+    public static List<M_ViewLocacao> getLocacaoReserva(M_Usuario usuario) {
+        try {
+            return r_locacao.getLocacaoEmReserva(usuario.getId());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }

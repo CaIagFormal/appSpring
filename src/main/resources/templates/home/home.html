@@ -42,22 +42,25 @@
   </div>
 
   <h2 class="text-center">Minhas Locações</h2>
-  <div class="text-center container">
-    <div class="row ml-5 mr-5 mt-3">
+  <div class="text-center">
+    <div class="row ml-1 mr-1 mt-3">
       <div class="col-4 container">
-        <h3 class="text-center">Concluidas</h3>
-        <div class="row container">
+        <h3 class="text-center">Concluídas</h3>
+        <div class="row">
           <div class="col-3">
-            <p class="text-center">Check-in</p>
+            <p>Check-in</p>
           </div>
           <div class="col-3">
-            <p class="text-center">Check-out</p>
+            <p>Check-out</p>
           </div>
-          <div class="col-3">
-            <p class="text-center">Quarto</p>
+          <div class="col-2">
+            <p>Quarto</p>
           </div>
-          <div class="col-3">
-            <p class="text-center">Preço</p>
+          <div class="col-2">
+            <p>Total</p>
+          </div>
+          <div class="col-2">
+            <p>Diárias</p>
           </div>
         </div>
         <div th:each="locacao : ${completa}" class="row">
@@ -67,28 +70,34 @@
           <div class="col-3">
             <p th:text="${locacao.checkout}"></p>
           </div>
-          <div class="col-3">
-            <p th:text="${locacao.quarto.num}"></p>
+          <div class="col-2">
+            <p th:text="${locacao.num}"></p>
           </div>
-          <div class="col-3">
-            <p><span th:text="${locacao.preco}"></span> R$</p>
+          <div class="col-2">
+            <p><span th:text="${locacao.preco*locacao.diarias}"></span> R$</p>
+          </div>
+          <div class="col-2">
+            <p th:text="${locacao.diarias}"></p>
           </div>
         </div>
       </div>
       <div class="col-4 container">
         <h3 class="text-center">Em Curso</h3>
-        <div class="row container">
+        <div class="row">
           <div class="col-3">
-            <p class="text-center">Check-in</p>
+            <p>Check-in</p>
           </div>
           <div class="col-3">
-            <p class="text-center">Check-out</p>
+            <p>Check-out</p>
           </div>
-          <div class="col-3">
-            <p class="text-center">Número</p>
+          <div class="col-2">
+            <p>Quarto</p>
           </div>
-          <div class="col-3">
-            <p class="text-center">Preço</p>
+          <div class="col-2">
+            <p>Total</p>
+          </div>
+          <div class="col-2">
+            <p>Diárias</p>
           </div>
         </div>
 
@@ -99,28 +108,34 @@
           <div class="col-3">
             <p th:text="${locacao.checkout}"></p>
           </div>
-          <div class="col-3">
-            <p th:text="${locacao.quarto.num}"></p>
+          <div class="col-2">
+            <p th:text="${locacao.num}"></p>
           </div>
-          <div class="col-3">
-            <p><span th:text="${locacao.preco}"></span> R$</p>
+          <div class="col-2">
+            <p><span th:text="${locacao.preco*locacao.diarias}"></span> R$</p>
+          </div>
+          <div class="col-2">
+            <p th:text="${locacao.diarias}"></p>
           </div>
         </div>
       </div>
       <div class="col-4 container">
         <h3 class="text-center">Reserva</h3>
-        <div class="row container">
+        <div class="row">
           <div class="col-3">
             <p class="text-center">Check-in</p>
           </div>
           <div class="col-3">
             <p class="text-center">Check-out</p>
           </div>
-          <div class="col-3">
-            <p class="text-center">Número</p>
+          <div class="col-2">
+            <p class="text-center">Quarto</p>
           </div>
-          <div class="col-3">
-            <p class="text-center">Preço</p>
+          <div class="col-2">
+            <p class="text-center">Total</p>
+          </div>
+          <div class="col-2">
+            <p class="text-center">Diárias</p>
           </div>
         </div>
 
@@ -131,11 +146,14 @@
           <div class="col-3">
             <p th:text="${locacao.checkout}"></p>
           </div>
-          <div class="col-3">
-            <p th:text="${locacao.quarto.num}"></p>
+          <div class="col-2">
+            <p th:text="${locacao.num}"></p>
           </div>
-          <div class="col-3">
-            <p><span th:text="${locacao.preco}"></span> R$</p>
+          <div class="col-2">
+            <p><span th:text="${locacao.preco*locacao.diarias}"></span> R$</p>
+          </div>
+          <div class="col-2">
+            <p th:text="${locacao.diarias}"></p>
           </div>
         </div>
       </div>

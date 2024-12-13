@@ -1,6 +1,7 @@
 package com.primeira.appSpring.repository;
 
 import com.primeira.appSpring.model.M_Locacao;
+import com.primeira.appSpring.model.M_ViewLocacao;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -15,12 +16,27 @@ public interface R_Locacao extends JpaRepository<M_Locacao, Long> {
     @Query(value = "SELECT * FROM LOCACAO WHERE ID_USUARIO = :USUARIO",nativeQuery = true)
     List<M_Locacao> getLocacaoByUsuario(@Param("USUARIO") Long usuario);
 
-    @Query(value = "SELECT * FROM LOCACAO WHERE ID_USUARIO = :USUARIO AND NOW() >= CHECKOUT",nativeQuery = true)
-    List<M_Locacao> getLocacaoCompleta(@Param("USUARIO") Long usuario);
+    @Query(value = "SELECT Q.NUM,L.PRECO,L.SENHA,L.CHECKIN,L.CHECKOUT, " +
+            "CASE (L.CHECKOUT-L.CHECKIN) " +
+            "WHEN 0 THEN 1 ELSE (L.CHECKOUT-L.CHECKIN) END AS DIARIAS " +
+            "FROM LOCACAO L " +
+            "JOIN QUARTO Q ON Q.ID=L.ID_QUARTO " +
+            " WHERE L.ID_USUARIO = :USUARIO AND NOW() >= L.CHECKOUT",nativeQuery = true)
+    List<M_ViewLocacao> getLocacaoCompleta(@Param("USUARIO") Long usuario);
 
-    @Query(value = "SELECT * FROM LOCACAO WHERE ID_USUARIO = :USUARIO AND NOW() < CHECKIN",nativeQuery = true)
-    List<M_Locacao> getLocacaoEmReserva(@Param("USUARIO") Long usuario);
+    @Query(value = "SELECT Q.NUM,L.PRECO,L.SENHA,L.CHECKIN,L.CHECKOUT, " +
+            "CASE (L.CHECKOUT-L.CHECKIN) " +
+            "WHEN 0 THEN 1 ELSE (L.CHECKOUT-L.CHECKIN) END AS DIARIAS " +
+            "FROM LOCACAO L " +
+            "JOIN QUARTO Q ON Q.ID=L.ID_QUARTO " +
+            " WHERE L.ID_USUARIO = :USUARIO AND NOW() < L.CHECKIN",nativeQuery = true)
+    List<M_ViewLocacao> getLocacaoEmReserva(@Param("USUARIO") Long usuario);
 
-    @Query(value = "SELECT * FROM LOCACAO WHERE ID_USUARIO = :USUARIO AND NOW() BETWEEN CHECKIN AND CHECKOUT",nativeQuery = true)
-    List<M_Locacao> getLocacaoEmCurso(@Param("USUARIO") Long usuario);
+    @Query(value = "SELECT Q.NUM,L.PRECO,L.SENHA,L.CHECKIN,L.CHECKOUT, " +
+            "CASE (L.CHECKOUT-L.CHECKIN) " +
+            "WHEN 0 THEN 1 ELSE (L.CHECKOUT-L.CHECKIN) END AS DIARIAS " +
+            "FROM LOCACAO L " +
+            "JOIN QUARTO Q ON Q.ID=L.ID_QUARTO " +
+            "WHERE L.ID_USUARIO = :USUARIO AND NOW() BETWEEN L.CHECKIN AND L.CHECKOUT",nativeQuery = true)
+    List<M_ViewLocacao> getLocacaoEmCurso(@Param("USUARIO") Long usuario);
 }
