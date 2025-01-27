@@ -86,4 +86,12 @@ public class C_Cadastro {
         model.addAttribute("quartos", S_Cadastro.getQuartos(checkin,checkout));
         return "pv/quartosdisp";
     }
+
+    @GetMapping("/refeitorio")
+    public String getRefeitorio(HttpSession session) {
+        if (session.getAttribute("usuario") ==null) {
+            return "cadastro/cadastro";
+        }
+        return "refeitorio/cadastraritens";
+    }
 }
