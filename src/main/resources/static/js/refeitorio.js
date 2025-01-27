@@ -17,6 +17,7 @@ function lerProduto() {
           }
           console.log("Initialization finished. Ready to start");
           Quagga.start();
+          $('#camera').css({"height":$("#camera").children('canvas').attr('height')});
     });
 
     Quagga.onDetected(function (data){
@@ -37,7 +38,8 @@ function lerProduto() {
         }
 
         tentativas_barra = []
-        $("#resultados").append("<p>"+data.codeResult.code+"</p>");
+        $("#resultados").append("<p><b>Produto:</b> Sei lá</p>\n<p><b>Valor:</b> Muito</p>");
+        $("#codigo").val(data.codeResult.code)
 
     })
 }

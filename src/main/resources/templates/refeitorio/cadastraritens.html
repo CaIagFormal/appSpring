@@ -8,6 +8,8 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <!--sweet alert-->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- fontawersome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
     <!-- quagga js -->
     <script src="/js/quagga.min.js" defer></script>
     <!--jquery-->
@@ -52,11 +54,18 @@
             <div class="col-6">
 
                 <div class="row container">
-                    <div class="input-group mb-3">
-                        <label class="input-group-text" for="codigo">Código</label>
-                        <input type="number" id="codigo" class="form-control col-10" placeholder="Código de Barras">
+                    <div class="col-4">
+                        <div class="input-group mb-3">
+                            <label class="input-group-text" for="codigo"><i class="fa-solid fa-barcode"></i></label>
+                            <input type="number" id="codigo" class="form-control" disabled>
+                        </div>
                     </div>
-                    <button id="enviartexto" class="btn btn-primary col-2">Enviar</button>
+                    <div class="col-8">
+                        <div class="input-group mb-3">
+                            <label class="input-group-text" for="produto">Produto</label>
+                            <input type="text" id="produto" class="form-control" placeholder="Digite o Produto">
+                        </div>
+                    </div>
                 </div>
                 <div id="resultados"></div>
             </div>
