@@ -19,7 +19,7 @@
             crossorigin="anonymous"></script>
     <!--CUSTOMS-->
     <script src="/js/index.js" defer></script>
-    <script src="/js/refeitorio.js" defer></script>
+    <script src="/js/refeitorio.js" defer th:inline="javascript"></script>
 
     <style>
         #fundo-cam {
@@ -63,7 +63,11 @@
                     <div class="col-8">
                         <div class="input-group mb-3">
                             <label class="input-group-text" for="produto">Produto</label>
-                            <input type="text" id="produto" class="form-control" placeholder="Digite o Produto">
+                            <input type="text" id="produto" list="produtos" class="form-control" placeholder="Digite o Produto">
+
+                            <datalist id="produtos">
+                                <option th:each="produto : ${produtos}"  th:value="${produto.descricao}"></option>
+                            </datalist>
                         </div>
                     </div>
                 </div>
@@ -76,4 +80,9 @@
         </div>
 
     </div>
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        var data = [[${produtos}]];
+        /*]]>*/
+    </script>
 </body>

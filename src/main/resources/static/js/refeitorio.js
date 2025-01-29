@@ -1,3 +1,5 @@
+console.log(data);
+
 function lerProduto() {
     let tentativas_barra = [];
 
@@ -38,6 +40,13 @@ function lerProduto() {
         }
 
         tentativas_barra = []
+
+        for (var i = 0; i<data.length; i++) {
+            if (data[i].cod_barras == data.codeResult.code) {
+                break;
+            }
+        };
+
         $("#resultados").append("<p><b>Produto:</b> Sei lá</p>\n<p><b>Valor:</b> Muito</p>");
         $("#codigo").val(data.codeResult.code)
 

@@ -1,12 +1,11 @@
 package com.primeira.appSpring.controller;
 
-import com.fasterxml.jackson.databind.ser.impl.StringArraySerializer;
 import com.primeira.appSpring.model.M_Locacao;
 import com.primeira.appSpring.model.M_Quarto;
 import com.primeira.appSpring.model.M_Resposta;
 import com.primeira.appSpring.model.M_Usuario;
 import com.primeira.appSpring.service.S_Cadastro;
-import com.primeira.appSpring.service.S_Home;
+import com.primeira.appSpring.service.S_Refeitorio;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
@@ -88,10 +87,11 @@ public class C_Cadastro {
     }
 
     @GetMapping("/refeitorio")
-    public String getRefeitorio(HttpSession session) {
+    public String getRefeitorio(HttpSession session,Model model) {
         if (session.getAttribute("usuario") ==null) {
             return "cadastro/cadastro";
         }
+        model.addAttribute("produtos", S_Refeitorio.findAll());
         return "refeitorio/cadastraritens";
     }
 }
