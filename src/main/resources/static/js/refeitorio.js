@@ -1,7 +1,7 @@
 console.log(data);
 
 var selecionados = [];
-var precos_sel = [];
+var qtd_sel = [];
 function lerProduto() {
     let tentativas_barra = [];
 
@@ -61,11 +61,11 @@ function adicionarAoCarrinho(id) {
     }
     // prevenir multiplos do mesmo
     selecionados.push(id);
+    qtd_sel.push(1);
 
-    let valor = parseFloat(data[id].preco);
-    precos_sel.push(valor);
     calcularTotal();
 
+    let valor = parseFloat(data[id].preco);
     let resultado = "<div class=\"meache\">\n"
     resultado += "\t<p class=\"mb-0\"><b>Produto:</b> "+data[id].descricao+"</p>\n"
     resultado += "\t<div class=\"row mb-0\">\n"
@@ -98,7 +98,7 @@ function adicionarAoCarrinho(id) {
     let quantidade = $(item).find(".quantidade");
     let valor_total = $(item).find(".total");
     $(remover).click(function() {
-        precos_sel.splice(selecionados.indexOf(id),1)
+        qtd_sel.splice(selecionados.indexOf(id),1)
         selecionados.splice(selecionados.indexOf(id),1)
         if ($("#codigo").val()==data[id].cod_barras){
             $("#codigo").val("");
@@ -118,17 +118,16 @@ function adicionarAoCarrinho(id) {
             $(quantidade).val(qtd_val-(qtd_val%1));
             qtd_val = $(quantidade).val();
         }
-        qtd_val *= valor;
-        $(valor_total).text(qtd_val.toFixed(2));
-        precos_sel[selecionados.indexOf(id)] = qtd_val;
+        $(valor_total).text((qtd_val*valor).toFixed(2));
+        qtd_sel[selecionados.indexOf(id)] = qtd_val;
         calcularTotal();
     });
 }
 
 function calcularTotal() {
     let total = 0.0;
-    for (var i = 0; i < precos_sel.length; i++) {
-        total += precos_sel[i];
+    for (var i = 0; i < qtd_sel.length; i++) {
+        total += qtd_sel[i]*parseFloat(data[selecionados[i]].preco);
     }
     $("#total_carrinho").text(total.toFixed(2));
 }
@@ -147,6 +146,23 @@ function adicionarPartindoDeTexto() {
     $("#produto").val("");
 }
 
+function enviarmds() {
+    if (selecionados.length==0) {
+        return;
+    }
+
+    lista = ""
+    for (let i = 0; i < selecionados.length; i++) {
+        lista += selecionados[i]+","+qtd_sel[i]+"|";
+    }
+    lista = lista.slice(0,lista.length-1);
+    $("#lista_itens").val(lista);
+    console.log($("#lista_itens")[0]);
+    //$("form").trigger("submit");
+}
+
 $("#lercamera").click(lerProduto);
 
 $("#produto").change(adicionarPartindoDeTexto);
+
+$("#incluir").click(enviarmds);

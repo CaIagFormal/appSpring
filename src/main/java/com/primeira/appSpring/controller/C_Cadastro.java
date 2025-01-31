@@ -97,7 +97,7 @@ public class C_Cadastro {
         if (session.getAttribute("usuario") ==null) {
             return "cadastro/cadastro";
         }
-        long l_id = Long.getLong(id);
+        long l_id = Long.parseLong(id);
         M_Locacao m_locacao = S_Home.getLocacaoById(l_id);
         if (m_locacao==null) {
             return "redirect:/";

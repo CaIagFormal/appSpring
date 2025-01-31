@@ -82,7 +82,14 @@
                         </div>
                     </div>
                     <div id="carrinho"></div>
-                    <p><b>Valor Total: </b>R$ <span id="total_carrinho">0.00</span></p>
+                    <div class="row">
+                        <div class="col-9 text-start">
+                            <p><b>Valor Total: </b>R$ <span id="total_carrinho">0.00</span></p>
+                        </div>
+                        <div class="col-3 text-end">
+                            <button class="btn btn-primary incluir">Incluir</button>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="col-1"><div class="vr" style="height: 100%"></div></div>
@@ -93,7 +100,9 @@
                 </div>
             </div>
         </div>
-
+        <form target="/incluir_itens">
+            <input type="hidden" name="itens" id="lista_itens">
+        </form>
     </div>
     <script th:inline="javascript">
         /*<![CDATA[*/
