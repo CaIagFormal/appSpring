@@ -158,7 +158,7 @@ function enviarmds() {
     lista = lista.slice(0,lista.length-1);
     $("#lista_itens").val(lista);
     console.log($("#lista_itens")[0]);
-    //$("form").trigger("submit");
+    $("form").trigger("submit");
 }
 
 $("#lercamera").click(lerProduto);

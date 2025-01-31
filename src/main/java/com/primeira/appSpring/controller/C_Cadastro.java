@@ -23,6 +23,12 @@ import java.time.LocalDate;
 @Controller
 public class C_Cadastro {
 
+    private final S_Refeitorio s_refeitorio;
+
+    public C_Cadastro(S_Refeitorio s_refeitorio) {
+        this.s_refeitorio = s_refeitorio;
+    }
+
     //Usuario
     @GetMapping("/cadastro")
     public String getCadastro() {
@@ -103,7 +109,19 @@ public class C_Cadastro {
             return "redirect:/";
         }
         session.setAttribute("locacao",m_locacao);
-        model.addAttribute("produtos", S_Refeitorio.findAll());
+
+        model.addAttribute("produtos", s_refeitorio.findAll());
         return "refeitorio/cadastraritens";
+    }
+
+    @PostMapping("/incluir_itens")
+    public String incluirItens(HttpSession session, @RequestParam("itens") String itens) {
+        M_Locacao m_locacao = (M_Locacao) session.getAttribute("locacao");
+        if (m_locacao == null) {
+            return "redirect:/";
+        }
+        long[][] l_itens = s_refeitorio.gerarItens(itens);
+        s_refeitorio.incluirItens(l_itens,m_locacao);
+        return "redirect:/";
     }
 }
