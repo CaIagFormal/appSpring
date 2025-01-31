@@ -15,3 +15,9 @@ $(".previsto").each(function(index) {
 });
 
 $("#total_previsto").text(total_previsto.toFixed(2));
+
+$(".btn-refeitorio").click(function() {
+    let id = $(this).parent().children(".id_locacao")[0];
+    $("#id").val(id);
+    $("form").trigger('submit');
+})

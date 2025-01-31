@@ -6,8 +6,8 @@ import com.primeira.appSpring.model.M_ViewLocacao;
 import com.primeira.appSpring.repository.R_Locacao;
 import org.springframework.stereotype.Service;
 
-import javax.swing.*;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class S_Home {
@@ -46,5 +46,9 @@ public class S_Home {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public static M_Locacao getLocacaoById(Long id) {
+        return r_locacao.findById(id).orElse(null);
     }
 }

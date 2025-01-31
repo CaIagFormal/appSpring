@@ -5,6 +5,7 @@ import com.primeira.appSpring.model.M_Quarto;
 import com.primeira.appSpring.model.M_Resposta;
 import com.primeira.appSpring.model.M_Usuario;
 import com.primeira.appSpring.service.S_Cadastro;
+import com.primeira.appSpring.service.S_Home;
 import com.primeira.appSpring.service.S_Refeitorio;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -87,10 +88,21 @@ public class C_Cadastro {
     }
 
     @GetMapping("/refeitorio")
-    public String getRefeitorio(HttpSession session,Model model) {
+    public String getRefeitorio() {
+        return "redirect:/";
+    }
+
+    @PostMapping("/refeitorio")
+    public String postRefeitorio(HttpSession session,Model model, @RequestParam("id") String id) {
         if (session.getAttribute("usuario") ==null) {
             return "cadastro/cadastro";
         }
+        long l_id = Long.getLong(id);
+        M_Locacao m_locacao = S_Home.getLocacaoById(l_id);
+        if (m_locacao==null) {
+            return "redirect:/";
+        }
+        session.setAttribute("locacao",m_locacao);
         model.addAttribute("produtos", S_Refeitorio.findAll());
         return "refeitorio/cadastraritens";
     }

@@ -1,6 +1,7 @@
 console.log(data);
 
 var selecionados = [];
+var precos_sel = [];
 function lerProduto() {
     let tentativas_barra = [];
 
@@ -61,17 +62,28 @@ function adicionarAoCarrinho(id) {
     // prevenir multiplos do mesmo
     selecionados.push(id);
 
+    let valor = parseFloat(data[id].preco);
+    precos_sel.push(valor);
+    calcularTotal();
+
     let resultado = "<div class=\"meache\">\n"
     resultado += "\t<p class=\"mb-0\"><b>Produto:</b> "+data[id].descricao+"</p>\n"
-    resultado += "\t<p class=\"mb-0\"><b>Valor:</b> R$"+parseFloat(data[id].preco).toFixed(2)+"</p>\n"
+    resultado += "\t<div class=\"row mb-0\">\n"
+    resultado += "\t\t<div class=\"col-6\">\n"
+    resultado += "\t\t\t<p class=\"mb-0\"><b>Valor/Qtd:</b> R$"+valor.toFixed(2)+"</p>\n"
+    resultado += "\t\t</div>\n"
+    resultado += "\t\t<div class=\"col-6\">\n"
+    resultado += "\t\t\t<p class=\"mb-0\"><b>Preço:</b> R$<span class=\"total\">"+valor.toFixed(2)+"</span></p>\n"
+    resultado += "\t\t</div>\n"
+    resultado += "\t</div>\n"
     resultado += "\t<div class=\"row mb-3\">\n"
-    resultado += "\t\t<div class=\"col-6\">"
-    resultado += "\t\t\t<div class=\"input-group\">"
+    resultado += "\t\t<div class=\"col-4\">\n"
+    resultado += "\t\t\t<div class=\"input-group\">\n"
     resultado += "\t\t\t\t<b class=\"input-group-text\">Qtd: </b>"
     resultado += "<input type=\"number\" min=\"1\" max=\"99\" value=\"1\" class=\"form-control quantidade\">\n"
     resultado += "\t\t\t</div>\n"
     resultado += "\t\t</div>\n"
-    resultado += "\t\t<div class=\"col-2\">\n"
+    resultado += "\t\t<div class=\"col-8 text-end\">\n"
     resultado += "\t\t\t<button class=\"btn btn-danger remover\">X</button>\n"
     resultado += "\t\t</div>\n"
     resultado += "\t</div>\n"
@@ -83,14 +95,42 @@ function adicionarAoCarrinho(id) {
     $("#codigo").val(data[id].cod_barras);
 
     let remover = $(item).find(".remover");
-    remover.click(function() {
+    let quantidade = $(item).find(".quantidade");
+    let valor_total = $(item).find(".total");
+    $(remover).click(function() {
+        precos_sel.splice(selecionados.indexOf(id),1)
         selecionados.splice(selecionados.indexOf(id),1)
         if ($("#codigo").val()==data[id].cod_barras){
             $("#codigo").val("");
         }
+        calcularTotal();
         item.remove();
     });
+    $(quantidade).change(function() {
+        let qtd_val = $(quantidade).val();
+        if (qtd_val<1) {
+            $(quantidade).val(1);
+            qtd_val = 1;
+        } else if (qtd_val>99) {
+            $(quantidade).val(99);
+            qtd_val = 99;
+        } else if (qtd_val%1>0) {
+            $(quantidade).val(qtd_val-(qtd_val%1));
+            qtd_val = $(quantidade).val();
+        }
+        qtd_val *= valor;
+        $(valor_total).text(qtd_val.toFixed(2));
+        precos_sel[selecionados.indexOf(id)] = qtd_val;
+        calcularTotal();
+    });
+}
 
+function calcularTotal() {
+    let total = 0.0;
+    for (var i = 0; i < precos_sel.length; i++) {
+        total += precos_sel[i];
+    }
+    $("#total_carrinho").text(total.toFixed(2));
 }
 
 function adicionarPartindoDeTexto() {

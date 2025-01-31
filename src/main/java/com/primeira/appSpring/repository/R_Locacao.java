@@ -16,7 +16,7 @@ public interface R_Locacao extends JpaRepository<M_Locacao, Long> {
     @Query(value = "SELECT * FROM LOCACAO WHERE ID_USUARIO = :USUARIO",nativeQuery = true)
     List<M_Locacao> getLocacaoByUsuario(@Param("USUARIO") Long usuario);
 
-    @Query(value = "SELECT Q.NUM,L.PRECO,L.SENHA,L.CHECKIN,L.CHECKOUT, " +
+    @Query(value = "SELECT L.ID,Q.NUM,L.PRECO,L.SENHA,L.CHECKIN,L.CHECKOUT, " +
             "CASE (L.CHECKOUT-L.CHECKIN) " +
             "WHEN 0 THEN 1 ELSE (L.CHECKOUT-L.CHECKIN) END AS DIARIAS " +
             "FROM LOCACAO L " +
@@ -24,7 +24,7 @@ public interface R_Locacao extends JpaRepository<M_Locacao, Long> {
             " WHERE L.ID_USUARIO = :USUARIO AND NOW() >= L.CHECKOUT",nativeQuery = true)
     List<M_ViewLocacao> getLocacaoCompleta(@Param("USUARIO") Long usuario);
 
-    @Query(value = "SELECT Q.NUM,L.PRECO,L.SENHA,L.CHECKIN,L.CHECKOUT, " +
+    @Query(value = "SELECT L.ID,Q.NUM,L.PRECO,L.SENHA,L.CHECKIN,L.CHECKOUT, " +
             "CASE (L.CHECKOUT-L.CHECKIN) " +
             "WHEN 0 THEN 1 ELSE (L.CHECKOUT-L.CHECKIN) END AS DIARIAS " +
             "FROM LOCACAO L " +
@@ -32,7 +32,7 @@ public interface R_Locacao extends JpaRepository<M_Locacao, Long> {
             " WHERE L.ID_USUARIO = :USUARIO AND NOW() < L.CHECKIN",nativeQuery = true)
     List<M_ViewLocacao> getLocacaoEmReserva(@Param("USUARIO") Long usuario);
 
-    @Query(value = "SELECT Q.NUM,L.PRECO,L.SENHA,L.CHECKIN,L.CHECKOUT, " +
+    @Query(value = "SELECT L.ID,Q.NUM,L.PRECO,L.SENHA,L.CHECKIN,L.CHECKOUT, " +
             "CASE (L.CHECKOUT-L.CHECKIN) " +
             "WHEN 0 THEN 1 ELSE (L.CHECKOUT-L.CHECKIN) END AS DIARIAS " +
             "FROM LOCACAO L " +
