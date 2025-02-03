@@ -71,7 +71,7 @@
             <p><b>Número:</b> <span th:text="${locacao.num}"></span></p>
           </div>
           <div class="col-6">
-            <p><b>Gasto: </b>R$ <span class="gasto" th:text="${(locacao.preco*locacao.diarias)+locacao.consumos}}+'(R$'+${locacao.consumos}+' em consumo)'"></span></p>
+            <p><b>Gasto: </b>R$ <span class="gasto" th:text="${locacao.preco*locacao.diarias+locacao.consumos}"></span></p>
           </div>
           <div class="col-12">
             <p><b>Diárias:</b> <span th:text="${locacao.diarias}"></span></p>
@@ -92,7 +92,7 @@
             <p><b>Número:</b> <span th:text="${locacao.num}"></span></p>
           </div>
           <div class="col-6">
-            <p><b>Gasto: </b>R$ <span class="gasto" th:text="${(locacao.preco*locacao.diarias)+locacao.consumos}}+'(R$'+${locacao.consumos}+' em consumo)'"></span></p>
+            <p><b>Gasto: </b>R$ <span class="gasto" th:text="${locacao.preco*locacao.diarias+locacao.consumos}"></span></p>
           </div>
           <div class="col-6">
             <p><b>Diárias:</b> <span th:text="${locacao.diarias}"></span></p>
