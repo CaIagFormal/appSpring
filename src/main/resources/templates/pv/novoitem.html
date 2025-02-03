@@ -1,0 +1,16 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<div class="container row" th:each="consumo : ${consumos}">
+    <div class="col-3">
+        <p><b th:text="${consumo.produto.descricao}"></b> <span th:text="${consumo.qtd}"></span>x</p>
+    </div>
+    <div class="col-3 text-start">
+        <p><b>Data: </b><span th:text="${#temporals.format(consumo.data,'dd-MM-yyyy HH:mm')}"></span></p>
+    </div>
+    <div class="col-3 text-start">
+        <p><b>Preço Unit.: </b>R$<span th:text="${consumo.preco}/${consumo.qtd}"></span></p>
+    </div>
+    <div class="col-3 text-start">
+        <p><b>Total: </b>R$<span th:text="${consumo.preco}"></span></p>
+    </div>
+    <hr>
+</div>

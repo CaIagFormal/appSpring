@@ -1,9 +1,8 @@
 package com.primeira.appSpring.controller;
 
-import com.primeira.appSpring.model.M_Locacao;
-import com.primeira.appSpring.model.M_Quarto;
-import com.primeira.appSpring.model.M_Resposta;
-import com.primeira.appSpring.model.M_Usuario;
+import com.primeira.appSpring.model.*;
+import com.primeira.appSpring.repository.R_Consumo;
+import com.primeira.appSpring.repository.R_Locacao;
 import com.primeira.appSpring.service.S_Cadastro;
 import com.primeira.appSpring.service.S_Home;
 import com.primeira.appSpring.service.S_Refeitorio;
@@ -11,22 +10,25 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.time.LocalDate;
+import java.util.List;
 
 @Controller
 public class C_Cadastro {
 
     private final S_Refeitorio s_refeitorio;
+    private final R_Locacao r_locacao;
 
-    public C_Cadastro(S_Refeitorio s_refeitorio) {
+    private final R_Consumo r_consumo;
+
+    public C_Cadastro(S_Refeitorio s_refeitorio,R_Locacao r_locacao, R_Consumo r_consumo) {
         this.s_refeitorio = s_refeitorio;
+        this.r_locacao = r_locacao;
+        this.r_consumo = r_consumo;
     }
 
     //Usuario
@@ -98,30 +100,34 @@ public class C_Cadastro {
         return "redirect:/";
     }
 
-    @PostMapping("/refeitorio")
-    public String postRefeitorio(HttpSession session,Model model, @RequestParam("id") String id) {
-        if (session.getAttribute("usuario") ==null) {
-            return "cadastro/cadastro";
-        }
-        long l_id = Long.parseLong(id);
-        M_Locacao m_locacao = S_Home.getLocacaoById(l_id);
-        if (m_locacao==null) {
+    @GetMapping("/refeitorio/{id}")
+    public String postRefeitorio(HttpSession session,Model model, @PathVariable("id") long id) {
+        M_Usuario m_usuario = (M_Usuario) session.getAttribute("usuario");
+        if (m_usuario == null) {
             return "redirect:/";
         }
-        session.setAttribute("locacao",m_locacao);
 
+        M_Locacao m_locacao = r_locacao.getLocacaoByIdAndUser(id,m_usuario.getId());
+        if (m_locacao == null) {
+            return "redirect:/";
+        }
+
+        session.setAttribute("locacao",m_locacao);
+        model.addAttribute("locacao",m_locacao);
         model.addAttribute("produtos", s_refeitorio.findAll());
+        model.addAttribute("consumos", r_consumo.getConsumosByLocacao(m_locacao.getId()));
         return "refeitorio/cadastraritens";
     }
 
     @PostMapping("/incluir_itens")
-    public String incluirItens(HttpSession session, @RequestParam("itens") String itens) {
+    public String incluirItens(HttpSession session, @RequestParam("lista_itens") String itens, Model model) {
         M_Locacao m_locacao = (M_Locacao) session.getAttribute("locacao");
         if (m_locacao == null) {
             return "redirect:/";
         }
         long[][] l_itens = s_refeitorio.gerarItens(itens);
-        s_refeitorio.incluirItens(l_itens,m_locacao);
-        return "redirect:/";
+        List<M_Consumo> m_consumoList = s_refeitorio.incluirItens(l_itens,m_locacao);
+        model.addAttribute("consumos", m_consumoList);
+        return "pv/novoitem";
     }
 }

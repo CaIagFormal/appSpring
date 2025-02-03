@@ -21,9 +21,9 @@ public class S_Cadastro {
     private static R_Quarto r_quarto;
 
     public S_Cadastro(R_Usuario r_usuario, R_Locacao r_locacao, R_Quarto r_quarto) {
-        this.r_usuario = r_usuario;
-        this.r_locacao = r_locacao;
-        this.r_quarto = r_quarto;
+        S_Cadastro.r_usuario = r_usuario;
+        S_Cadastro.r_locacao = r_locacao;
+        S_Cadastro.r_quarto = r_quarto;
     }
 
     public static M_Usuario cadastrarUsuario(String usuario, String usuario_conf,

@@ -82,7 +82,6 @@
         <h3 class="text-center">Em Curso</h3>
 
         <div th:each="locacao : ${emcurso}" class="row container">
-          <p hidden th:text="${locacao.id}" class="id_locacao"></p>
           <div class="col-6">
             <p><b>Check-In:</b> <span th:text="${locacao.checkin}"></span></p>
           </div>
@@ -99,7 +98,7 @@
             <p><b>Diárias:</b> <span th:text="${locacao.diarias}"></span></p>
           </div>
           <div class="col-6">
-            <button class="btn btn-primary btn-refeitorio">Refeitório</button>
+            <a class="btn btn-primary" th:href="'/refeitorio/'+${locacao.id}">Refeitório</a>
           </div>
         </div>
       </div>
@@ -131,8 +130,7 @@
     <h3 class="ml-5"> PREVISTO: <span id="total_previsto"></span>R$</h3>
   </div>
 
-  <form method="post" action="/refeitorio">
-    <input type="hidden" id="id" name="id">
+  <form method="get" action="/refeitorio">
   </form>
 </body>
 

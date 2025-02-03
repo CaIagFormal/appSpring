@@ -47,8 +47,4 @@ public class S_Home {
             return null;
         }
     }
-
-    public static M_Locacao getLocacaoById(Long id) {
-        return r_locacao.findById(id).orElse(null);
-    }
 }

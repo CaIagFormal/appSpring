@@ -87,7 +87,7 @@
                             <p><b>Valor Total: </b>R$ <span id="total_carrinho">0.00</span></p>
                         </div>
                         <div class="col-3 text-end">
-                            <button class="btn btn-primary incluir">Incluir</button>
+                            <button class="btn btn-primary" id="incluir">Incluir</button>
                         </div>
                     </div>
                 </div>
@@ -100,9 +100,38 @@
                 </div>
             </div>
         </div>
-        <form target="/incluir_itens">
-            <input type="hidden" name="itens" id="lista_itens">
-        </form>
+        <div class="aba_produtos mt-5">
+            <h3 class="text-center mt-2 mb-3">Locação: <span th:text="${locacao.id}"></span></h3>
+            <div class="container row">
+                <div class="col-4">
+                    <p><b>Quarto: </b><span th:text="${locacao.quarto.num}"></span></p>
+                </div>
+                <div class="col-4">
+                    <p><b>Check-in: </b><span th:text="${locacao.checkin}"></span></p>
+                </div>
+                <div class="col-4">
+                    <p><b>Check-out: </b><span th:text="${locacao.checkout}"></span></p>
+                </div>
+            </div>
+            <hr>
+            <div id="lst_consumos">
+                <div class="container row" th:each="consumo : ${consumos}">
+                    <div class="col-3">
+                        <p><b th:text="${consumo.produto.descricao}"></b> <span th:text="${consumo.qtd}"></span>x</p>
+                    </div>
+                    <div class="col-3 text-start">
+                        <p><b>Data: </b><span th:text="${#temporals.format(consumo.data,'dd-MM-yyyy HH:mm')}"></span></p>
+                    </div>
+                    <div class="col-3 text-start">
+                        <p><b>Preço Unit.: </b>R$<span th:text="${consumo.preco}/${consumo.qtd}"></span></p>
+                    </div>
+                    <div class="col-3 text-start">
+                        <p><b>Total: </b>R$<span th:text="${consumo.preco}"></span></p>
+                    </div>
+                    <hr>
+                </div>
+            </div>
+        </div>
     </div>
     <script th:inline="javascript">
         /*<![CDATA[*/

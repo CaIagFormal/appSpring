@@ -153,12 +153,16 @@ function enviarmds() {
 
     lista = ""
     for (let i = 0; i < selecionados.length; i++) {
-        lista += selecionados[i]+","+qtd_sel[i]+"|";
+        lista += (selecionados[i]+1)+","+qtd_sel[i]+"|";
     }
     lista = lista.slice(0,lista.length-1);
-    $("#lista_itens").val(lista);
-    console.log($("#lista_itens")[0]);
-    $("form").trigger("submit");
+
+    $.ajax({url: "/incluir_itens", success: function(result){
+        $("#lst_consumos").prepend(result);
+        },
+        data: {lista_itens:lista},
+        type: "POST"
+        });
 }
 
 $("#lercamera").click(lerProduto);

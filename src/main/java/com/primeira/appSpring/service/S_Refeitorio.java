@@ -6,11 +6,11 @@ import com.primeira.appSpring.model.M_Locacao;
 import com.primeira.appSpring.model.M_Produto;
 import com.primeira.appSpring.repository.R_Consumo;
 import com.primeira.appSpring.repository.R_Produto;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -26,12 +26,21 @@ public class S_Refeitorio {
         return r_produto.findAll();
     }
 
-    public void incluirItens(long[][] itens, M_Locacao locacao) {
+    public List<M_Consumo> incluirItens(long[][] itens, M_Locacao locacao) {
         LocalDateTime now = LocalDateTime.now();
+        List<M_Consumo> m_consumoList = new ArrayList<>();
         for (int i = 0; i < itens.length; i++) {
             M_Consumo m_consumo = new M_Consumo();
+            m_consumo.setLocacao(locacao);
+            m_consumo.setData(now);
+            m_consumo.setQtd((int) itens[i][1]);
+            m_consumo.setProduto(r_produto.getReferenceById(itens[i][0]));
 
+            m_consumo.setPreco(m_consumo.getProduto().getPreco().multiply(BigDecimal.valueOf(m_consumo.getQtd())));
+            m_consumo = r_consumo.save(m_consumo);
+            m_consumoList.add(m_consumo);
         }
+        return m_consumoList;
     }
 
     public long[][] gerarItens(String itens) {

@@ -13,4 +13,5 @@ public interface M_ViewLocacao {
     Date getCheckout();
     int getDiarias();
 
+    int getConsumos();
 }
