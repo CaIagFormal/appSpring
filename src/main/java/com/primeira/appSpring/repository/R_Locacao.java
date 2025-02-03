@@ -18,7 +18,8 @@ public interface R_Locacao extends JpaRepository<M_Locacao, Long> {
 
     @Query(value = "SELECT L.ID,Q.NUM,L.PRECO,L.SENHA,L.CHECKIN,L.CHECKOUT, " +
             "CASE (L.CHECKOUT-L.CHECKIN) " +
-            "WHEN 0 THEN 1 ELSE (L.CHECKOUT-L.CHECKIN) END AS DIARIAS,SUM(C.PRECO) AS CONSUMOS " +
+            "WHEN 0 THEN 1 ELSE (L.CHECKOUT-L.CHECKIN) END AS DIARIAS, " +
+            "CASE WHEN (SUM(C.PRECO)) IS NULL THEN 0 ELSE (SUM(C.PRECO)) END AS CONSUMOS " +
             "FROM LOCACAO L " +
             "JOIN QUARTO Q ON Q.ID=L.ID_QUARTO " +
             "LEFT JOIN CONSUMO C ON C.ID_LOCACAO = L.ID " +
@@ -36,7 +37,8 @@ public interface R_Locacao extends JpaRepository<M_Locacao, Long> {
 
     @Query(value = "SELECT L.ID,Q.NUM,L.PRECO,L.SENHA,L.CHECKIN,L.CHECKOUT, " +
             "CASE (L.CHECKOUT-L.CHECKIN) " +
-            "WHEN 0 THEN 1 ELSE (L.CHECKOUT-L.CHECKIN) END AS DIARIAS,SUM(C.PRECO) AS CONSUMOS " +
+            "WHEN 0 THEN 1 ELSE (L.CHECKOUT-L.CHECKIN) END AS DIARIAS, " +
+            "CASE WHEN (SUM(C.PRECO)) IS NULL THEN 0 ELSE (SUM(C.PRECO)) END AS CONSUMOS " +
             "FROM LOCACAO L " +
             "JOIN QUARTO Q ON Q.ID=L.ID_QUARTO " +
             "LEFT JOIN CONSUMO C ON C.ID_LOCACAO = L.ID " +
