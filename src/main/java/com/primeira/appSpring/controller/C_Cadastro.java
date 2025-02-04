@@ -4,16 +4,14 @@ import com.primeira.appSpring.model.*;
 import com.primeira.appSpring.repository.R_Consumo;
 import com.primeira.appSpring.repository.R_Locacao;
 import com.primeira.appSpring.service.S_Cadastro;
-import com.primeira.appSpring.service.S_Home;
 import com.primeira.appSpring.service.S_Refeitorio;
+import com.primeira.appSpring.service.S_Session;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -23,10 +21,13 @@ public class C_Cadastro {
     private final S_Refeitorio s_refeitorio;
     private final R_Locacao r_locacao;
 
+    private final S_Session s_session;
+
     private final R_Consumo r_consumo;
 
-    public C_Cadastro(S_Refeitorio s_refeitorio,R_Locacao r_locacao, R_Consumo r_consumo) {
+    public C_Cadastro(S_Refeitorio s_refeitorio, S_Session s_session, R_Locacao r_locacao, R_Consumo r_consumo) {
         this.s_refeitorio = s_refeitorio;
+        this.s_session = s_session;
         this.r_locacao = r_locacao;
         this.r_consumo = r_consumo;
     }
@@ -53,7 +54,7 @@ public class C_Cadastro {
     //Locação
     @GetMapping("/cadLocacao")
     public String getCadLocacao(HttpSession session, Model model) {
-        if (!(session.getAttribute("usuario") ==null)) {
+        if (!s_session.has_session(session)) {
 
 
             return "locacao/cadastro";
@@ -103,7 +104,7 @@ public class C_Cadastro {
     @GetMapping("/refeitorio/{id}")
     public String postRefeitorio(HttpSession session,Model model, @PathVariable("id") long id) {
         M_Usuario m_usuario = (M_Usuario) session.getAttribute("usuario");
-        if (m_usuario == null) {
+        if (s_session.has_session(session)) {
             return "redirect:/";
         }
 
