@@ -62,6 +62,9 @@
           <div class="col-6">
             <p><b>Diárias:</b> <span th:text="${locacao.diarias}+' (R$'+${locacao.preco}+')'"></span></p>
           </div>
+          <div class="col-6">
+            <a class="btn btn-primary" th:href="'/refeitorio/'+${locacao.id}">Refeitório</a>
+          </div>
         </div>
       </div>
       <div class="col-4 container">
@@ -105,7 +108,7 @@
             <p><b>Previsto: </b>R$ <span class="previsto" th:text="${locacao.preco*locacao.diarias}"></span></p>
           </div>
           <div class="col-12">
-            <p><b>Diárias:</b> <span th:text="${locacao.diarias}"></span></p>
+            <p><b>Diárias:</b> <span th:text="${locacao.diarias}+' (R$'+${locacao.preco}+')'"></span></p>
           </div>
         </div>
       </div>
