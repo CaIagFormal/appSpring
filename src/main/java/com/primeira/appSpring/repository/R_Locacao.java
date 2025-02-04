@@ -24,7 +24,7 @@ public interface R_Locacao extends JpaRepository<M_Locacao, Long> {
             "JOIN QUARTO Q ON Q.ID=L.ID_QUARTO " +
             "LEFT JOIN CONSUMO C ON C.ID_LOCACAO = L.ID " +
             "WHERE L.ID_USUARIO = :USUARIO AND NOW() >= L.CHECKOUT " +
-            "GROUP BY L.ID,Q.NUM",nativeQuery = true)
+            "GROUP BY L.ID,Q.NUM ORDER BY L.CHECKIN DESC,L.CHECKOUT DESC",nativeQuery = true)
     List<M_ViewLocacao> getLocacaoCompleta(@Param("USUARIO") Long usuario);
 
     @Query(value = "SELECT L.ID,Q.NUM,L.PRECO,L.SENHA,L.CHECKIN,L.CHECKOUT, " +
@@ -32,7 +32,8 @@ public interface R_Locacao extends JpaRepository<M_Locacao, Long> {
             "WHEN 0 THEN 1 ELSE (L.CHECKOUT-L.CHECKIN) END AS DIARIAS,0 AS CONSUMOS " +
             "FROM LOCACAO L " +
             "JOIN QUARTO Q ON Q.ID=L.ID_QUARTO " +
-            "WHERE L.ID_USUARIO = :USUARIO AND NOW() < L.CHECKIN ",nativeQuery = true)
+            "WHERE L.ID_USUARIO = :USUARIO AND NOW() < L.CHECKIN " +
+            "ORDER BY L.CHECKIN DESC,L.CHECKOUT DESC",nativeQuery = true)
     List<M_ViewLocacao> getLocacaoEmReserva(@Param("USUARIO") Long usuario);
 
     @Query(value = "SELECT L.ID,Q.NUM,L.PRECO,L.SENHA,L.CHECKIN,L.CHECKOUT, " +
@@ -43,7 +44,7 @@ public interface R_Locacao extends JpaRepository<M_Locacao, Long> {
             "JOIN QUARTO Q ON Q.ID=L.ID_QUARTO " +
             "LEFT JOIN CONSUMO C ON C.ID_LOCACAO = L.ID " +
             "WHERE L.ID_USUARIO = :USUARIO AND NOW() BETWEEN L.CHECKIN AND L.CHECKOUT " +
-            "GROUP BY L.ID,Q.NUM",nativeQuery = true)
+            "GROUP BY L.ID,Q.NUM ORDER BY L.CHECKIN DESC,L.CHECKOUT DESC",nativeQuery = true)
     List<M_ViewLocacao> getLocacaoEmCurso(@Param("USUARIO") Long usuario);
 
     @Query(value = "SELECT * FROM LOCACAO WHERE ID = :ID AND ID_USUARIO = :USUARIO LIMIT 1",nativeQuery = true)

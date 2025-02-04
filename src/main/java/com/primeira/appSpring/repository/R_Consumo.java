@@ -11,6 +11,6 @@ import java.util.List;
 @Repository
 public interface R_Consumo extends JpaRepository<M_Consumo, Long> {
 
-    @Query(value = "SELECT * FROM CONSUMO WHERE ID_LOCACAO = :ID", nativeQuery = true)
+    @Query(value = "SELECT * FROM CONSUMO WHERE ID_LOCACAO = :ID ORDER BY DATA DESC", nativeQuery = true)
     List<M_Consumo> getConsumosByLocacao(@Param("ID") long id);
 }
