@@ -34,6 +34,7 @@
             width: 5%;
             height: 20%;
             position: absolute;
+            text-color: #F00;
         }
         #b {
             background: #FFF;
@@ -52,14 +53,29 @@
         <input type="text">
     </div>
     <script>
-        var pos;
+        var p_pos;
         var b_pos;
+        var keymaps = [87,83,38,40];
+        var scr_ratio = [1,2];
+        var scr_val = [scr_ratio[0]*100,scr_ratio[1]*100];
+        var keystates = [0,0,0,0];
+        var run = false;
+        var p_x = [5,90];
 
 
-        function start() {
+        function reset() {
             p_pos = [40,40];
             b_pos = [47.5,47.5];
             b_vel = [(Math.round(Math.random())*2)-1,(Math.round(Math.random())*2)-1];
+            game_update_pos();
+        }
+
+        async function start() {
+            run = true;
+            while (run) {
+                tick();
+                await sleep(10);
+            }
         }
 
         function resize() {
@@ -72,7 +88,9 @@
             } else {
                 csize = height;
             }
-            $("#canvas").css({"width":csize/div,"height":csize/div});
+            $("#canvas").css({"width":(csize/div)*scr_ratio[1],"height":csize/div});
+            $(".bar").css({"width":(5/scr_ratio[1])+"%"})
+            $("#b").css({"width":(5/scr_ratio[1])+"%"})
         }
 
         function sleep(time) {
@@ -80,29 +98,93 @@
         }
 
         function game_update_pos() {
-            $("#p1").css({"top":p_pos[0]+"%","left":5+"%"})
-            $("#p2").css({"top":p_pos[1]+"%","left":90+"%"})
-            $("#b").css({"top":b_pos[0]+"%","left":b_pos[1]+"%"})
+            $("#p1").css({"top":p_pos[0]+"%","left":p_x[0]/scr_ratio[1]+"%"})
+            $("#p2").css({"top":p_pos[1]+"%","left":p_x[1]/scr_ratio[1]+"%"})
+            $("#b").css({"top":b_pos[0]+"%","left":b_pos[1]/scr_ratio[1]+"%"})
+        }
+
+        function game_ball_edge_collision_axis(n) {
+            if (b_pos[n] > scr_val[n]-5) {
+                b_pos[n] = scr_val[n]-5;
+                b_vel[n] = -1;
+            } else if (b_pos[n] < 0) {
+                b_pos[n] = 0;
+                b_vel[n] = 1;
+            }
+        }
+
+        function game_ball_bar_collision(n) {
+            if (!(b_vel[1] == (n*2)-1)) {
+                return;
+            }
+            if (!(p_pos[n] < b_pos[0] + 5 && p_pos[n] + 20 > b_pos[0])) {
+                return;
+            }
+            if (!(b_pos[1] < p_x[n] + 5 && b_pos[1] + 5 > p_x[n])) {
+                return;
+            }
+            b_pos[1] = p_x[n]+(5*(1-n));
+            b_vel[1] = 1-(n*2);
         }
 
         function game_ball_velocity_apply() {
             b_pos[0] += b_vel[0];
+            game_ball_edge_collision_axis(0);
+
             b_pos[1] += b_vel[1];
+            game_ball_edge_collision_axis(1);
+
+            game_ball_bar_collision(0);
+            game_ball_bar_collision(1);
+        }
+
+        function game_bar_move(plr) {
+            p_pos[plr] += (keystates[plr*2+1]-keystates[plr*2])*2
+            if (p_pos[plr]>scr_val[0]-20) {
+                p_pos[plr] = scr_val[0]-20;
+            } else if (p_pos[plr]<0) {
+                p_pos[plr] = 0;
+            }
         }
 
         function tick() {
             game_ball_velocity_apply();
+            game_bar_move(0);
+            game_bar_move(1);
             game_update_pos();
         }
 
+        function game_key_set(event,val){
+            $("input").val("");
+            let key = keymaps.indexOf(event.which);
+            if (key==-1) {
+                return;
+            }
+            keystates[key] = val;
+        }
 
         $("input").keydown(function(event){
-          console.log("Key: " + event.which);
+            game_key_set(event,1);
+        });
+
+        $("input").keyup(function(event){
+            game_key_set(event,0);
         });
 
         resize();
-        start();
-        tick();
+        reset();
+
+        $("input").click(function(){
+            reset();
+            if (run == false) {
+                start();
+            }
+        });
+
+        $("input").focusout(function(){
+            run = false;
+        });
+
     </script>
 </body>
 </html>
