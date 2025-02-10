@@ -1,6 +1,7 @@
 package com.primeira.appSpring.model;
 
 import jakarta.persistence.*;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.math.BigDecimal;
 import java.sql.Date;
@@ -28,6 +29,12 @@ public class M_Locacao {
     private String senha;
 
     private BigDecimal preco;
+
+    @Value("${props.boolean.isFPL:#{false}}")
+    private boolean checked_in;
+
+    @Value("${props.boolean.isFPL:#{false}}")
+    private boolean no_show;
 
     public Long getId() {
         return id;
