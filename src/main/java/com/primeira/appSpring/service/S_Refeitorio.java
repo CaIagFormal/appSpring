@@ -21,11 +21,6 @@ public class S_Refeitorio {
 
     public S_Refeitorio(R_Produto r_produto, R_Consumo r_consumo) { S_Refeitorio.r_produto = r_produto;
         S_Refeitorio.r_consumo = r_consumo;}
-
-    public List<M_Produto> findAll() {
-        return r_produto.findAll();
-    }
-
     public List<M_Consumo> incluirItens(long[][] itens, M_Locacao locacao) {
         LocalDateTime now = LocalDateTime.now();
         List<M_Consumo> m_consumoList = new ArrayList<>();
