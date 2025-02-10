@@ -20,6 +20,15 @@ public class S_Arduino {
 
     public static char valida_senha(String entrada) {
         System.out.println("Entrada: "+entrada);
-        return (r_locacao.getLocacaoBySenha(entrada) != null) ? '1' : '0';
+        M_Locacao m_locacao = r_locacao.getLocacaoBySenha(entrada);
+        if (m_locacao == null) {
+            return '0';
+        }
+
+        if (!(m_locacao.getCheckin().toLocalDate().isEqual(LocalDate.now()))) {
+            return '1';
+        }
+        m_locacao.setChecked_in(true);
+        return '1';
     }
 }

@@ -91,4 +91,20 @@ public class M_Locacao {
     public void setPreco(BigDecimal preco) {
         this.preco = preco;
     }
+
+    public boolean isChecked_in() {
+        return checked_in;
+    }
+
+    public void setChecked_in(boolean checked_in) {
+        this.checked_in = checked_in;
+    }
+
+    public boolean isNo_show() {
+        return no_show;
+    }
+
+    public void setNo_show(boolean no_show) {
+        this.no_show = no_show;
+    }
 }

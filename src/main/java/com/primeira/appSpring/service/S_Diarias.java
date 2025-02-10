@@ -33,8 +33,24 @@ public class S_Diarias {
 
         M_Produto m_produto = r_produto.getReferenceById((long) 8);
         for (M_Locacao m_locacao:m_locacaos) {
+            if (conferirNoShow(m_locacao)) {
+                continue;
+            }
             gerarConsumoLocacao(m_locacao,m_produto);
+
         }
+    }
+
+    public boolean conferirNoShow(M_Locacao m_locacao) {
+        if (m_locacao.isChecked_in()) {
+            return false;
+        }
+        if (m_locacao.getCheckin().toLocalDate().isEqual(LocalDate.now())) {
+            return false;
+        }
+
+        m_locacao.setNo_show(true);
+        return true;
     }
 
     public void gerarConsumoLocacao(M_Locacao m_locacao,M_Produto m_produto) {
