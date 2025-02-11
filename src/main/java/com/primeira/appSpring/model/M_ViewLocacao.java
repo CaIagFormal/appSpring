@@ -13,7 +13,9 @@ public interface M_ViewLocacao {
     Date getCheckout();
     int getDiarias();
 
-    boolean getCheckedIn();
-
     BigDecimal getConsumos();
+
+    boolean getChecked_in();
+
+    boolean getNo_show();
 }

@@ -30,23 +30,35 @@
       margin: 10px;
       background: #FFF;
     }
+
+    .scroll {
+      overflow-y: auto;
+      height:90vh;
+    }
+
+    .danger {
+      color: #F00;
+    }
+
+    .too_late {
+      color: #800;
+    }
   </style>
 </head>
 
 <body>
   <div th:replace="pv/navbar"></div>
   <div class="container">
-    <h1 class="text-center mt-5 mb-5">HOME</h1>
-    <h2 class="text-center"> Você está perto de ter mais RAM!!!</h2>
+    <h2 class="text-center p-5"> Você está perto de ter mais RAM!!!</h2>
     <h2 class="text-center mb-5"> Aliás aqui está suas locações</h2>
   </div>
 
   <h2 class="text-center">Minhas Locações</h2>
   <div class="text-center">
     <div class="row principal ml-1 mr-1 mt-3">
-      <div class="col-4 container">
+      <div class="col-4 container scroll">
         <h3 class="text-center">Concluídas</h3>
-        <div th:each="locacao : ${completa}" class="row container">
+        <div th:each="locacao : ${completa}" class="row">
           <div class="col-6">
             <p><b>Check-In:</b> <span th:text="${locacao.checkin}"></span></p>
           </div>
@@ -71,12 +83,15 @@
           <div class="col-6 mb-3">
             <a class="btn btn-primary" th:href="'/refeitorio/'+${locacao.id}">Refeitório</a>
           </div>
+          <div th:if="${locacao.no_show}" class="text-start">
+            <b class="too_late">No-Show...</b>
+          </div>
         </div>
       </div>
-      <div class="col-4 container">
+      <div class="col-4 scroll container p-0">
         <h3 class="text-center">Em Curso</h3>
 
-        <div th:each="locacao : ${emcurso}" class="row container">
+        <div th:each="locacao : ${emcurso}" class="row">
           <div class="col-6">
             <p><b>Check-In:</b> <span th:text="${locacao.checkin}"></span></p>
           </div>
@@ -101,12 +116,15 @@
           <div class="col-6 mb-3">
             <a class="btn btn-primary" th:href="'/refeitorio/'+${locacao.id}">Refeitório</a>
           </div>
+          <div th:unless="${locacao.checked_in}" class="text-start">
+            <b class="danger">Faça seu check-in logo!</b>
+          </div>
         </div>
       </div>
-      <div class="col-4 container">
+      <div class="col-4 scroll container p-0">
         <h3 class="text-center">Reserva</h3>
 
-        <div th:each="locacao : ${reserva}" class="row container">
+        <div th:each="locacao : ${reserva}" class="row">
           <div class="col-6">
             <p><b>Check-In:</b> <span th:text="${locacao.checkin}"></span></p>
           </div>
@@ -132,9 +150,6 @@
       <p class="ml-5 mb-3"><b>Previsto:</b> R$<span id="total_previsto"></span></p>
     </div>
   </div>
-
-  <form method="get" action="/refeitorio">
-  </form>
 </body>
 
 

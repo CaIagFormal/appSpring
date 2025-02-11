@@ -11,7 +11,7 @@
     <!-- fontawersome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
     <!-- quagga js -->
-    <script src="/js/quagga.min.js" defer th:if="${locacao.checkout.after(#dates.createNow())}"></script>
+    <script src="/js/quagga.min.js" defer th:if="${emcurso&&locacao.checked_in}"></script>
     <!--jquery-->
     <script
             src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -19,7 +19,7 @@
             crossorigin="anonymous"></script>
     <!--CUSTOMS-->
     <script src="/js/index.js" defer></script>
-    <script src="/js/refeitorio.js" defer th:inline="javascript" th:if="${locacao.checkout.after(#dates.createNow())}"></script>
+    <script src="/js/refeitorio.js" defer th:inline="javascript" th:if="${emcurso&&locacao.checked_in}"></script>
 
     <style>
         #fundo-cam {
@@ -45,7 +45,7 @@
 <body>
     <div th:replace="pv/navbar"></div>
     <div class="container">
-        <div class="row mt-5" th:if="${locacao.checkout.after(#dates.createNow())}">
+        <div class="row mt-5" th:if="${emcurso&&locacao.checked_in}">
             <div class="col-5 aba_produtos">
                 <div class="p-2">
                     <div class="row">
@@ -87,6 +87,7 @@
         </div>
         <div class="aba_produtos mt-5">
             <h3 class="text-center mt-2 mb-3">Locação: <span th:text="${locacao.id}"></span></h3>
+            <h4 class="text-center mt-2 mb-3" th:if="${emcurso&&!(locacao.checked_in)}">Faça Check-In para poder comprar</h4>
             <div class="container row">
                 <div class="col-4">
                     <p><b>Quarto: </b><span th:text="${locacao.quarto.num}"></span></p>
@@ -102,7 +103,7 @@
             <div id="lst_consumos" th:insert="pv/novoitem.html"></div>
         </div>
     </div>
-    <script th:inline="javascript" th:if="${locacao.checkout.after(#dates.createNow())}">
+    <script th:inline="javascript" th:if="${emcurso&&locacao.checked_in}">
         /*<![CDATA[*/
         var data = [[${produtos}]];
         /*]]>*/

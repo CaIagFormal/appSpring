@@ -1,10 +1,16 @@
+/*
+
 package com.primeira.appSpring.controller;
 import com.fazecast.jSerialComm.*;
-import com.primeira.appSpring.repository.R_Locacao;
 import com.primeira.appSpring.service.S_Arduino;
 
 import java.io.*;
 import java.sql.Date;
+
+
+// CLASSE DEPRECIADA!!!
+// USE UMA IMPLEMENTAÇÃO DE C_ARDUINO!!
+
 
 public class ArduinoSerialCommunication {
 
@@ -58,8 +64,8 @@ public class ArduinoSerialCommunication {
                             output.write(pcm.readNBytes(10));
                         }
                         pcm.close();
+                    *\/
 
-                         */
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -67,3 +73,4 @@ public class ArduinoSerialCommunication {
         }
     }
 }
+*/

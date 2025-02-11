@@ -30,11 +30,9 @@ public class M_Locacao {
 
     private BigDecimal preco;
 
-    @Value("${props.boolean.isFPL:#{false}}")
-    private boolean checked_in;
+    private boolean checked_in = false;
 
-    @Value("${props.boolean.isFPL:#{false}}")
-    private boolean no_show;
+    private boolean no_show = false;
 
     public Long getId() {
         return id;

@@ -116,15 +116,16 @@ public class C_Cadastro {
             return "redirect:/";
         }
 
-        M_Locacao m_locacao = r_locacao.getLocacaoByIdAndUser(id,m_usuario.getId());
-        if (m_locacao == null) {
+        M_CursoLocacao mi_locacao = r_locacao.getLocacaoByIdAndUser(id,m_usuario.getId());
+        if (mi_locacao == null) {
             return "redirect:/";
         }
-
+        M_Locacao m_locacao = r_locacao.getReferenceById(mi_locacao.getId());
         session.setAttribute("locacao",m_locacao);
         model.addAttribute("locacao",m_locacao);
+        model.addAttribute("emcurso",mi_locacao.getEmcurso());
         model.addAttribute("produtos", r_produto.availableProducts());
-        model.addAttribute("consumos", r_consumo.getConsumosByLocacao(m_locacao.getId()));
+        model.addAttribute("consumos", r_consumo.getConsumosByLocacao(mi_locacao.getId()));
         return "refeitorio/cadastraritens";
     }
 
@@ -132,11 +133,20 @@ public class C_Cadastro {
     public String incluirItens(HttpSession session, @RequestParam("lista_itens") String itens, Model model) {
         M_Locacao m_locacao = (M_Locacao) session.getAttribute("locacao");
         if (m_locacao == null) {
-            return "redirect:/";
+            return null;
+        }
+        if (!(m_locacao.isChecked_in())) {
+            return null;
         }
         long[][] l_itens = s_refeitorio.gerarItens(itens);
         List<M_Consumo> m_consumoList = s_refeitorio.incluirItens(l_itens,m_locacao);
         model.addAttribute("consumos", m_consumoList);
         return "pv/novoitem";
+    }
+
+    @ExceptionHandler
+    @GetMapping("/pong")
+    public String error() {
+        return "pong/pong";
     }
 }
