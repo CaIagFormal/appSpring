@@ -3,16 +3,21 @@ package com.primeira.appSpring.service;
 import com.primeira.appSpring.model.M_Consumo;
 import com.primeira.appSpring.model.M_Locacao;
 import com.primeira.appSpring.model.M_Produto;
+import com.primeira.appSpring.model.M_Programa;
 import com.primeira.appSpring.repository.R_Consumo;
 import com.primeira.appSpring.repository.R_Locacao;
 import com.primeira.appSpring.repository.R_Produto;
+import com.primeira.appSpring.repository.R_Programa;
+import jakarta.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.*;
+import org.springframework.transaction.support.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Objects;
 
 @Service
 public class S_Diarias {
@@ -20,37 +25,60 @@ public class S_Diarias {
     private final R_Produto r_produto;
     private final R_Consumo r_consumo;
     private final R_Locacao r_locacao;
+    private final R_Programa r_programa;
 
-    public S_Diarias(R_Produto r_produto, R_Consumo r_consumo, R_Locacao r_locacao) {
+    @Qualifier("transactionManager")
+    protected final PlatformTransactionManager txManager;
+
+    public S_Diarias(R_Produto r_produto, R_Consumo r_consumo,
+                     R_Locacao r_locacao, R_Programa r_programa, PlatformTransactionManager txManager) {
         this.r_produto = r_produto;
         this.r_consumo = r_consumo;
         this.r_locacao = r_locacao;
+        this.r_programa = r_programa;
+        this.txManager = txManager;
     }
 
     @Scheduled(cron = "0 0 10 * * ? ")
     public void gerarConsumoDiaria() {
+        M_Programa m_programa = r_programa.getReferenceById(1L);
+        m_programa.setLast_run(LocalDateTime.now());
         List<M_Locacao> m_locacaos = r_locacao.getLocacaoParaConsumo();
 
         M_Produto m_produto = r_produto.getReferenceById((long) 8);
         for (M_Locacao m_locacao:m_locacaos) {
-            if (conferirNoShow(m_locacao)) {
-                continue;
-            }
             gerarConsumoLocacao(m_locacao,m_produto);
 
         }
     }
 
-    public boolean conferirNoShow(M_Locacao m_locacao) {
-        if (m_locacao.isChecked_in()) {
-            return false;
-        }
-        if (m_locacao.getCheckin().toLocalDate().isEqual(LocalDate.now())) {
-            return false;
+    @PostConstruct
+    public void init() {
+
+        TransactionTemplate tmpl = new TransactionTemplate(txManager);
+        tmpl.execute(new TransactionCallbackWithoutResult() {
+             @Override
+             protected void doInTransactionWithoutResult(TransactionStatus status) {
+                 consertarContabilizacao();
+             }
+         });
+    }
+
+    private void consertarContabilizacao() {
+
+        r_locacao.atualizarNoShow();
+
+        M_Programa m_programa = r_programa.getReferenceById(1L);
+        // Confere se o programa já rodou na data atual
+        if (m_programa.getLast_run().toLocalDate().isEqual(LocalDate.now())) {
+            return;
         }
 
-        m_locacao.setNo_show(true);
-        return true;
+        // Confere se o programa rodou antes das 10
+        if (m_programa.getLast_run().isBefore(LocalDateTime.now().withHour(10).withMinute(0).withSecond(0).minusNanos(0))) {
+            return;
+        }
+        gerarConsumoDiaria();
     }
 
     public void gerarConsumoLocacao(M_Locacao m_locacao,M_Produto m_produto) {
@@ -77,6 +105,5 @@ public class S_Diarias {
         }
         M_Produto m_produto = r_produto.getReferenceById((long) 8);
         gerarConsumoLocacao(m_locacao,m_produto);
-
     }
 }

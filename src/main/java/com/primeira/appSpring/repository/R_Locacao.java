@@ -5,6 +5,7 @@ import com.primeira.appSpring.model.M_CursoLocacao;
 import com.primeira.appSpring.model.M_Locacao;
 import com.primeira.appSpring.model.M_ViewLocacao;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -13,10 +14,8 @@ import java.util.List;
 
 @Repository
 public interface R_Locacao extends JpaRepository<M_Locacao, Long> {
-    @Query(value = "SELECT * FROM LOCACAO WHERE SENHA = :SENHA AND (NOW() BETWEEN CHECKIN AND CHECKOUT OR L.CHECKIN = L.CHECKOUT) AND NO_SHOW=FALSE LIMIT 1",nativeQuery = true)
+    @Query(value = "SELECT * FROM LOCACAO WHERE SENHA = :SENHA AND (NOW() BETWEEN CHECKIN AND CHECKOUT OR (CHECKIN = CHECKOUT AND CURRENT_DATE=CHECKIN)) AND NO_SHOW=FALSE LIMIT 1",nativeQuery = true)
     M_Locacao getLocacaoBySenha(@Param("SENHA") String senha);
-    @Query(value = "SELECT * FROM LOCACAO WHERE ID_USUARIO = :USUARIO",nativeQuery = true)
-    List<M_Locacao> getLocacaoByUsuario(@Param("USUARIO") Long usuario);
 
     @Query(value = "WITH CALC AS (SELECT L.ID,(L.CHECKOUT-L.CHECKIN) AS DIARIAS, " +
             "SUM(C.PRECO) AS CON FROM LOCACAO L " +
@@ -54,8 +53,8 @@ public interface R_Locacao extends JpaRepository<M_Locacao, Long> {
 
     @Query(value = "WITH CALC AS (SELECT L.ID,(L.CHECKOUT-L.CHECKIN) AS DIARIAS, " +
             "SUM(C.PRECO) AS CON FROM LOCACAO L " +
-            "LEFT JOIN CONSUMO C ON C.ID_LOCACAO = L.ID AND C.ID != 8 " +
-            "WHERE L.ID_USUARIO = :USUARIO AND (NOW() BETWEEN L.CHECKIN AND L.CHECKOUT OR L.CHECKIN = L.CHECKOUT) " +
+            "LEFT JOIN CONSUMO C ON C.ID_LOCACAO = L.ID AND C.ID_PRODUTO != 8 " +
+            "WHERE L.ID_USUARIO = :USUARIO AND (NOW() BETWEEN L.CHECKIN AND L.CHECKOUT OR (L.CHECKIN = L.CHECKOUT AND CURRENT_DATE = L.CHECKIN)) " +
             "AND L.NO_SHOW = FALSE " +
             "GROUP BY L.ID) " +
             "SELECT L.ID,Q.NUM,L.PRECO,L.SENHA,L.CHECKIN,L.CHECKOUT, " +
@@ -70,13 +69,21 @@ public interface R_Locacao extends JpaRepository<M_Locacao, Long> {
             "ORDER BY L.CHECKIN DESC,L.CHECKOUT DESC",nativeQuery = true)
     List<M_ViewLocacao> getLocacaoEmCurso(@Param("USUARIO") Long usuario);
 
-    @Query(value = "SELECT *" +
-            "FROM LOCACAO" +
-            "WHERE NOW() BETWEEN CHECKIN AND CHECKOUT-1 AND NO_SHOW = FALSE" +
+    @Query(value = "SELECT * " +
+            "FROM LOCACAO " +
+            "WHERE NOW() BETWEEN CHECKIN AND CHECKOUT-1 AND NO_SHOW = FALSE " +
             "ORDER BY CHECKIN DESC,CHECKOUT DESC",nativeQuery = true)
     List<M_Locacao> getLocacaoParaConsumo();
+
+    @Modifying
+    @Query(value = "UPDATE LOCACAO " +
+            "SET NO_SHOW = TRUE " +
+            "WHERE CURRENT_DATE > CHECKIN " +
+            "AND CHECKED_IN = FALSE"
+    ,nativeQuery = true)
+    void atualizarNoShow();
     @Query(value = "SELECT ID, " +
-            "((NOW() BETWEEN CHECKIN AND CHECKOUT OR CHECKIN = CHECKOUT) AND NO_SHOW = FALSE) AS EMCURSO " +
+            "((NOW() BETWEEN CHECKIN AND CHECKOUT OR (CHECKIN = CHECKOUT AND CHECKIN = CURRENT_DATE)) AND NO_SHOW = FALSE) AS EMCURSO " +
             "FROM LOCACAO WHERE ID = :ID AND ID_USUARIO = :USUARIO LIMIT 1",nativeQuery = true)
     M_CursoLocacao getLocacaoByIdAndUser(@Param("ID") Long id, @Param("USUARIO") Long usuario);
 }
