@@ -21,7 +21,7 @@ public interface R_Locacao extends JpaRepository<M_Locacao, Long> {
             "SUM(C.PRECO) AS CON FROM LOCACAO L " +
             "LEFT JOIN CONSUMO C ON C.ID_LOCACAO = L.ID AND C.ID != 8 " +
             "WHERE L.ID_USUARIO = :USUARIO AND " +
-            "(CURRENT_DATE = L.CHECKOUT AND L.CHECKIN < L.CHECKOUT) OR (CURRENT_DATE > L.CHECKOUT) OR L.NO_SHOW = TRUE " +
+            "((CURRENT_DATE = L.CHECKOUT AND L.CHECKIN < L.CHECKOUT) OR (CURRENT_DATE > L.CHECKOUT) OR L.NO_SHOW = TRUE)" +
             "GROUP BY L.ID) " +
             "SELECT L.ID,Q.NUM,L.PRECO,L.SENHA,L.CHECKIN,L.CHECKOUT, " +
             "CASE (CALC.DIARIAS) " +
@@ -86,4 +86,14 @@ public interface R_Locacao extends JpaRepository<M_Locacao, Long> {
             "((NOW() BETWEEN CHECKIN AND CHECKOUT OR (CHECKIN = CHECKOUT AND CHECKIN = CURRENT_DATE)) AND NO_SHOW = FALSE) AS EMCURSO " +
             "FROM LOCACAO WHERE ID = :ID AND ID_USUARIO = :USUARIO LIMIT 1",nativeQuery = true)
     M_CursoLocacao getLocacaoByIdAndUser(@Param("ID") Long id, @Param("USUARIO") Long usuario);
+
+    @Query(value = "select * from locacao where current_date+1=checkin",
+    nativeQuery = true)
+    List<M_Locacao> getLocacoesWhereCheckinIsTomorrow();
+
+    @Query(value = "select * from locacao where current_date-1=checkin and no_show=true",nativeQuery = true)
+    List<M_Locacao> getLocacoesWhereNoShowWasYesterday();
+
+    @Query(value = "select * from locacao where current_date-1=checkout",nativeQuery = true)
+    List<M_Locacao> getLocacoesWhereCheckOutWasYesterday();
 }

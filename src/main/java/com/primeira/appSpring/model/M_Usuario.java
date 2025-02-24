@@ -13,6 +13,7 @@ public class M_Usuario {
     private Long id;
 
     private String usuario;
+
     private String apelido;
 
     private String senha;

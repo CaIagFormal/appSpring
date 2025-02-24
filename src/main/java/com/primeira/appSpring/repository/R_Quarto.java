@@ -17,13 +17,13 @@ public interface R_Quarto extends JpaRepository<M_Quarto, Long> {
     @Query(value = "SELECT * FROM QUARTO Q " +
             "WHERE Q.ID NOT IN (" +
             "SELECT Q.ID FROM QUARTO Q JOIN LOCACAO L ON L.ID_QUARTO=Q.ID " +
-            "WHERE ((L.CHECKIN < :DATACHECKOUT AND L.CHECKOUT > :DATACHECKIN) OR (L.CHECKIN = :DATACHECKIN AND :DATACHECKIN = :DATACHECKOUT)) AND (L.NOSHOW=FALSE)",nativeQuery = true)
+            "WHERE ((L.CHECKIN < :DATACHECKOUT AND L.CHECKOUT > :DATACHECKIN) OR (L.CHECKIN = :DATACHECKIN AND :DATACHECKIN = :DATACHECKOUT)) AND (L.NO_SHOW=FALSE))",nativeQuery = true)
     List<M_Quarto> getAvailableQuarto(@Param("DATACHECKIN") LocalDate datacheckin,@Param("DATACHECKOUT") LocalDate datacheckout);
 
     @Query(value = "SELECT * FROM QUARTO Q " +
             "WHERE Q.ID NOT IN (" +
             "SELECT Q.ID FROM QUARTO Q JOIN LOCACAO L ON L.ID_QUARTO=Q.ID " +
-            "WHERE ((L.CHECKIN < :DATACHECKOUT AND L.CHECKOUT > :DATACHECKIN) OR (L.CHECKIN = :DATACHECKIN AND :DATACHECKIN = :DATACHECKOUT)) AND (L.NOSHOW=FALSE)" +
+            "WHERE ((L.CHECKIN < :DATACHECKOUT AND L.CHECKOUT > :DATACHECKIN) OR (L.CHECKIN = :DATACHECKIN AND :DATACHECKIN = :DATACHECKOUT)) AND (L.NO_SHOW=FALSE))" +
             "AND Q.ID = :QUARTO LIMIT 1",nativeQuery = true)
     M_Quarto isQuartoAvailable(@Param("DATACHECKIN") LocalDate datacheckin,@Param("DATACHECKOUT") LocalDate datacheckout,@Param("QUARTO") Long id);
 }
