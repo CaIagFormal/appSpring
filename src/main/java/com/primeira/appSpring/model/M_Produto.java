@@ -17,6 +17,10 @@ public class M_Produto {
 
     private BigDecimal preco;
 
+    private int min;
+
+    private int max;
+
     public Long getId() {
         return id;
     }
@@ -47,5 +51,21 @@ public class M_Produto {
 
     public void setPreco(BigDecimal preco) {
         this.preco = preco;
+    }
+
+    public int getMin() {
+        return min;
+    }
+
+    public void setMin(int min) {
+        this.min = min;
+    }
+
+    public int getMax() {
+        return max;
+    }
+
+    public void setMax(int max) {
+        this.max = max;
     }
 }
