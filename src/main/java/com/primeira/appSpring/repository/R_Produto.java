@@ -18,6 +18,7 @@ public interface R_Produto extends JpaRepository<M_Produto, Long> {
     @Query(value = "with g_consumo as\n" +
             "\t(select\n" +
             "\t\tp.id as id_produto,\n" +
+            "\t\tsum(c.qtd) as quantidade,\n" +
             "\t\tsum(c.preco)/sum(c.qtd) as custo_medio\n" +
             "\tfrom produto p \n" +
             "\tjoin consumo c on c.id_produto = p.id\n" +
@@ -29,7 +30,7 @@ public interface R_Produto extends JpaRepository<M_Produto, Long> {
             "\t(select\n" +
             "\t\tc.id_produto,\n" +
             "\t\tsum(c.quantidade) as quantidade,\n" +
-            "\t\tmax(c.data) as ultima_compra\n" +
+            "\t\tcast(max(c.data) as date) as ultima_compra\n" +
             "\tfrom compra c\n" +
             "\twhere c.id_produto <> 8 and c.data <= :data\n" +
             "\tgroup by c.id\n" +
@@ -37,7 +38,7 @@ public interface R_Produto extends JpaRepository<M_Produto, Long> {
             "\t\n" +
             "select\n" +
             "\tp.descricao as produto,\n" +
-            "\tg_compra.quantidade,\n" +
+            "\tg_compra.quantidade-g_consumo.quantidade as quantidade,\n" +
             "\tp.min as min,\n" +
             "\tp.max as max,\n" +
             "\tg_consumo.custo_medio,\n" +
