@@ -37,7 +37,7 @@ public interface R_Produto extends JpaRepository<M_Produto, Long> {
             "\t)\n" +
             "\t\n" +
             "select\n" +
-            "\tp.descricao as produto,\n" +
+            "\tp.cod_barras as produto,\n" +
             "\tg_compra.quantidade-g_consumo.quantidade as quantidade,\n" +
             "\tp.min as min,\n" +
             "\tp.max as max,\n" +
