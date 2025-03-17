@@ -17,9 +17,9 @@ public class M_Produto {
 
     private BigDecimal preco;
 
-    private int min;
+    private Integer min;
 
-    private int max;
+    private Integer max;
 
     public Long getId() {
         return id;
@@ -53,19 +53,19 @@ public class M_Produto {
         this.preco = preco;
     }
 
-    public int getMin() {
+    public Integer getMin() {
         return min;
     }
 
-    public void setMin(int min) {
+    public void setMin(Integer min) {
         this.min = min;
     }
 
-    public int getMax() {
+    public Integer getMax() {
         return max;
     }
 
-    public void setMax(int max) {
+    public void setMax(Integer max) {
         this.max = max;
     }
 }
