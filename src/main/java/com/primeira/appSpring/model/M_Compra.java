@@ -20,6 +20,8 @@ public class M_Compra {
 
     private int quantidade;
 
+    private String fornecedor;
+
     private LocalDateTime data;
 
     @JoinColumn(name="id_locacao")
@@ -72,5 +74,13 @@ public class M_Compra {
 
     public void setLocacao(M_Locacao locacao) {
         this.locacao = locacao;
+    }
+
+    public String getFornecedor() {
+        return fornecedor;
+    }
+
+    public void setFornecedor(String fornecedor) {
+        this.fornecedor = fornecedor;
     }
 }
